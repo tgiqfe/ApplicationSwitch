@@ -4,13 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic.FileIO;
+using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib
 {
     internal class Rule_FileMove : RuleBase
     {
-        public string TargetPath { get; set; }
+        public static readonly string[] TYPE_NAME_PATTERN = { "FileMove", "Move" };
 
+        [YamlIgnore]
+        public string TargetFilePath { get; set; }
+
+        [YamlIgnore]
         public string EvacuateDirName
         {
             get
@@ -19,16 +24,16 @@ namespace ApplicationSwitch.Lib
             }
         }
 
-        public void ToHidden()
+        public override void ToHidden()
         {
-            var fileName = Path.GetFileName(this.TargetPath);
-            var sourcePath = this.TargetPath;
+            var fileName = Path.GetFileName(this.TargetFilePath);
+            var sourcePath = this.TargetFilePath;
             var destinationPath = Path.Combine(this.EvacuateDirName, fileName);
-            if (File.Exists(this.TargetPath))
+            if (File.Exists(this.TargetFilePath))
             {
                 File.Move(sourcePath, destinationPath);
             }
-            else if (Directory.Exists(this.TargetPath))
+            else if (Directory.Exists(this.TargetFilePath))
             {
                 Directory.Move(sourcePath, destinationPath);
             }
@@ -38,11 +43,11 @@ namespace ApplicationSwitch.Lib
             }
         }
 
-        public void ToVisible()
+        public override void ToVisible()
         {
-            var fileName = Path.GetFileName(this.TargetPath);
+            var fileName = Path.GetFileName(this.TargetFilePath);
             var sourcePath = Path.Combine(this.EvacuateDirName, fileName);
-            var destinationPath = this.TargetPath;
+            var destinationPath = this.TargetFilePath;
             if (File.Exists(sourcePath))
             {
                 File.Copy(sourcePath, destinationPath);

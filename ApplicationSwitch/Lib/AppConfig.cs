@@ -9,6 +9,8 @@ namespace ApplicationSwitch.Lib
     internal class AppConfig
     {
         public string Name { get; set; }
+        public string Description { get; set; }
+        public string HostNames { get; set; }
 
         public List<RuleBase> Rules { get; set; }
     }
