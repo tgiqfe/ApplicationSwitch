@@ -2,6 +2,9 @@
 
 using ApplicationSwitch;
 using ApplicationSwitch.Lib;
+using ApplicationSwitch.Lib.Manifest;
+using ApplicationSwitch.Lib.Yml;
+using ProfileList2.Lib.ScriptLanguage.Yml;
 using YamlDotNet.Serialization;
 
 var root = new AppConfigRoot()
@@ -13,14 +16,15 @@ var root = new AppConfigRoot()
                 Name = "Adobe Acrobat Reader",
                 Description = "Adobe Acrobat Reader",
                 HostNames = "PCName01",
-                Rules = new List<RuleBase>()
+                Rules = new List<RuleTemplate>()
                 {
-                    new Rule_FileMove()
+                    new RuleTemplate()
                     {
-                        Name = "Test",
                         Type = "FileMove",
-                        Index = 1,
-                        TargetFilePath = @"C:\Temp\test.txt"
+                        Name = "Shortcut move",
+                        Rule = "aiueo" + "\r\n" +
+                            "kakicukeko" + "\r\n" +
+                            "sasisuseso",
                     }
                 }
             }
@@ -30,7 +34,11 @@ var root = new AppConfigRoot()
 
 
 
-new Serializer().Serialize(Console.Out, root);
+new SerializerBuilder().
+     WithEventEmitter(x => new MultilineScalarFlowStyleEmitter(x)).
+     WithEmissionPhaseObjectGraphVisitor(x => new YamlIEnumerableSkipEmptyObjectGraphVisitor(x.InnerVisitor)).
+     Build().
+     Serialize(Console.Out, root);
 
 
 Console.ReadLine();
