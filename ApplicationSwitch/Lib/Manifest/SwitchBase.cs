@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Manifest
 {
-    internal class RuleBase
+    internal class SwitchBase
     {
         public string Name { get; set; }
-        public string Type { get; set; }
-        public int Index { get; set; }
 
         public virtual void ToHidden() { }
 
         public virtual void ToVisible() { }
-
     }
 }

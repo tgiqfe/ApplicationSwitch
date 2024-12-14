@@ -8,34 +8,29 @@ using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib.Manifest
 {
-    internal class Rule_FileMove : RuleBase
+    internal class Switch_FileMove : SwitchBase
     {
         public static readonly string[] TYPE_NAME_PATTERN = { "FileMove", "Move" };
 
-        [YamlIgnore]
         public string TargetFilePath { get; set; }
-
-        [YamlIgnore]
-        public string EvacuateDirName
-        {
-            get
-            {
-                return $"{Name}_{Index:0000}";
-            }
-        }
+        public string EvacuateDirPath { get; set; }
 
         public override void ToHidden()
         {
             var fileName = Path.GetFileName(TargetFilePath);
             var sourcePath = TargetFilePath;
-            var destinationPath = Path.Combine(EvacuateDirName, fileName);
+            var destinationPath = Path.Combine(EvacuateDirPath, fileName);
             if (File.Exists(TargetFilePath))
             {
-                File.Move(sourcePath, destinationPath);
+                File.Move(sourcePath, destinationPath, true);
             }
             else if (Directory.Exists(TargetFilePath))
             {
-                Directory.Move(sourcePath, destinationPath);
+                if (Directory.Exists(destinationPath))
+                {
+                    Directory.Delete(destinationPath, true);
+                    Directory.Move(sourcePath, destinationPath);
+                }
             }
             else
             {
@@ -46,15 +41,21 @@ namespace ApplicationSwitch.Lib.Manifest
         public override void ToVisible()
         {
             var fileName = Path.GetFileName(TargetFilePath);
-            var sourcePath = Path.Combine(EvacuateDirName, fileName);
+            var sourcePath = Path.Combine(EvacuateDirPath, fileName);
             var destinationPath = TargetFilePath;
             if (File.Exists(sourcePath))
             {
-                File.Copy(sourcePath, destinationPath);
+                if (!File.Exists(destinationPath))
+                {
+                    File.Copy(sourcePath, destinationPath);
+                }
             }
             else if (Directory.Exists(sourcePath))
             {
-                FileSystem.CopyDirectory(sourcePath, destinationPath);
+                if (!Directory.Exists(destinationPath))
+                {
+                    FileSystem.CopyDirectory(sourcePath, destinationPath);
+                }
             }
             else
             {
