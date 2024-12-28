@@ -25,12 +25,12 @@ namespace ApplicationSwitch.Lib.Rules
             if (File.Exists(source) && !File.Exists(this.Target))
             {
                 //  File evacuate.
-                FileSystem.MoveFile(source, this.Target, true);
+                FileSystem.CopyFile(source, this.Target, true);
             }
-            else if (Directory.Exists(source) && Directory.Exists(this.Target))
+            else if (Directory.Exists(source) && !Directory.Exists(this.Target))
             {
                 //  Directory evacuate.
-                FileSystem.MoveDirectory(source, this.Target, true);
+                FileSystem.CopyDirectory(source, this.Target, true);
             }
             else
             {
@@ -49,12 +49,12 @@ namespace ApplicationSwitch.Lib.Rules
             if (File.Exists(this.Target))
             {
                 //  File evacuate.
-                FileSystem.MoveFile(this.Target, _evacuatePath, true);
+                FileSystem.MoveFile(this.Target, destination, true);
             }
             else if (Directory.Exists(this.Target))
             {
                 //  Directory evacuate.
-                FileSystem.MoveDirectory(this.Target, _evacuatePath, true);
+                FileSystem.MoveDirectory(this.Target, destination, true);
             }
             else
             {

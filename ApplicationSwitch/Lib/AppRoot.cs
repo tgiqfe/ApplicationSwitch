@@ -1,4 +1,5 @@
 ﻿using ApplicationSwitch.Lib.Yml;
+using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib
@@ -7,6 +8,8 @@ namespace ApplicationSwitch.Lib
     {
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
+
+
 
         public void ProcessFromRule()
         {
@@ -21,9 +24,44 @@ namespace ApplicationSwitch.Lib
         /// <returns></returns>
         private bool? CheckEnDis()
         {
+            IEnumerable<string> enableTargets = Regex.Replace(this.Config.Target.Enable, @"\r?\n", "").
+                Split(",").
+                Select(x => x.Trim());
+            IEnumerable<string> disableTargets = Regex.Replace(this.Config.Target.Disable, @"\r?\n", "").
+                Split(",").
+                Select(x => x.Trim());
+
+            isMatch(enableTargets, Environment.MachineName);
+
+
+
             //this.Configs.Target;
             //ここでホスト名をもとにしてEnable/Disableを判定
             return true;
+
+            bool isMatch(IEnumerable<string> targets, string hostName)
+            {
+                foreach (var target in targets)
+                {
+                    if (target == "*")
+                    {
+                        return true;
+                    }
+                    else if (target.Contains("*"))
+                    {
+
+                    }
+                    else if (target.Contains("-"))
+                    {
+
+                    }
+                    else
+                    {
+                        return target.Equals(hostName, StringComparison.OrdinalIgnoreCase);
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>

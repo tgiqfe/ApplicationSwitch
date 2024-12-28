@@ -24,6 +24,12 @@ var app = DataSerializer.Load<AppRoot>(path2);
 app.ProcessFromRule();
 
 
+sample_AppConfig003.Test01();
+
+
+
+
+
 
 
 Console.ReadLine();
