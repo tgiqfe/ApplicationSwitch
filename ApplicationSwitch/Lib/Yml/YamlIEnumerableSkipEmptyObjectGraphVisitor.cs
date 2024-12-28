@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Core;
-using YamlDotNet.Serialization.ObjectGraphVisitors;
+﻿using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.ObjectGraphVisitors;
 
-
-namespace ProfileList2.Lib.ScriptLanguage.Yml
+namespace ApplicationSwitch.Lib.Yml
 {
     public class YamlIEnumerableSkipEmptyObjectGraphVisitor : ChainedObjectGraphVisitor
     {
@@ -17,17 +10,15 @@ namespace ProfileList2.Lib.ScriptLanguage.Yml
         {
         }
 
-        public override bool EnterMapping(IObjectDescriptor key, IObjectDescriptor value, IEmitter context, ObjectSerializer serializer)
+        public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context, ObjectSerializer serializer)
         {
-            var retVal = false;
+            bool retVal = false;
 
-            if (value.Value == null)
-            {
-                return false;
-            }
+            if (value.Value == null) return retVal;
 
-            if (value.Value is IEnumerable enumerableObject)
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(value.Value.GetType()))
             {
+                var enumerableObject = (System.Collections.IEnumerable)value.Value;
                 if (enumerableObject.GetEnumerator().MoveNext())
                 {
                     retVal = base.EnterMapping(key, value, context, serializer);

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ApplicationSwitch.Lib;
+using ApplicationSwitch.Lib.Yml;
+using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch
 {
     internal class Setting
     {
-        public string EvacuatePath { get; set; }
+        public string LogDirectory { get; set; }
     }
 }

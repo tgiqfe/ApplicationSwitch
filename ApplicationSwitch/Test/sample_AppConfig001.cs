@@ -1,13 +1,13 @@
 ﻿using ApplicationSwitch.Lib;
 using ApplicationSwitch.Lib.Yml;
-using ProfileList2.Lib.ScriptLanguage.Yml;
 using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Test
 {
     internal class sample_AppConfig001
     {
-        public void test()
+        /*
+        public static void Test01()
         {
             var root = new AppConfigRoot()
             {
@@ -40,5 +40,6 @@ namespace ApplicationSwitch.Test
                  Build().
                  Serialize(Console.Out, root);
         }
+        */
     }
 }

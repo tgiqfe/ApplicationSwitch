@@ -1,0 +1,36 @@
+App:
+  Metadata:
+    Name: Adobe Acrobat Reader
+    Description: Adobe Acrobat Reader
+    Evacuate: C:\ProgramData\Caches\AdobeAcrobatReader
+  Target:
+    Enable: |-
+      TestPC01, TestPC02, TestPCB001-150, TestPCC*,
+      Sample01, Sample05-10, Sample*a,
+    Disable: |-
+      DisPc01, DisPc02,
+      Disa001-050
+  Rule:
+    Rules:
+    - Action: File
+      Name: adobe_01
+      Target: C:\ProgramData\Microsoft\Windows\StartMenu\Adobe Acrobat Reader.lnk
+    - Action: Registry
+      Name: adobe_02
+      RegistryKey: HKEY_LOCAL_MACHINE\Software\Adobe\Reader
+      RegistryParam: bUpdater
+      RegistryValue: 0
+      RegistryType: REG_DWORD
+    - Action: Permission
+      Name: adobe_03
+      Target: C:\ProgramData\Microsoft\Windows\StartMenu\Adobe2.txt
+      Access: Everyone/FullControl/Allow
+      Inherited: true
+      Inheritance:
+      Owner: Administrators
+    - Action: Command
+      Name: adobe_04
+      Execute: cmd.exe
+      Arguments: /c ping localhost -n 5
+
+

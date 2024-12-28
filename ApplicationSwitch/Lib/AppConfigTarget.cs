@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib
 {
-    internal class RuleTemplate
+    internal class AppConfigTarget
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public string Rule { get; set; }
+        public string Enable { get; set; }
+        public string Disable { get; set; }
     }
 }
