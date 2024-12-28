@@ -14,7 +14,7 @@ namespace ApplicationSwitch.Test
         {
             var app = new AppRoot()
             {
-                Configs = new AppConfig()
+                Config = new AppConfig()
                 {
                     Metadata = new AppConfigMetadata()
                     {

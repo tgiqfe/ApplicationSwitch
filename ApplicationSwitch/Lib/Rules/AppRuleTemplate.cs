@@ -24,9 +24,10 @@ namespace ApplicationSwitch.Lib.Rules
         {
             return this.Action switch
             {
-                string s when candidate_File.Any(x => s.Equals(StringComparison.OrdinalIgnoreCase)) => new RuleFile()
+                string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile()
                 {
                     Name = this.Name,
+                    EvacuatePath = evacuate,
                     Target = this.Target,
                 },
                 _ => null
