@@ -9,6 +9,6 @@ namespace ApplicationSwitch.Lib
 {
     internal class AppConfigRule
     {
-        public List<Rules.RuleTemplate> Rules { get; set; }
+        public List<AppRuleTemplate> Rules { get; set; }
     }
 }

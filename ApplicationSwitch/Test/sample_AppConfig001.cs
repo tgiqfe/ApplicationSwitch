@@ -1,6 +1,5 @@
 ﻿using ApplicationSwitch.Lib;
 using ApplicationSwitch.Lib.Yml;
-using ProfileList2.Lib.ScriptLanguage.Yml;
 using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Test

@@ -1,10 +1,11 @@
-﻿using YamlDotNet.Serialization;
+﻿using ApplicationSwitch.Lib.Yml;
+using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib
 {
     internal class AppRoot
     {
         [YamlMember(Alias = "App")]
-        public Dictionary<string, AppConfig> Configs { get; set; }
+        public AppConfig Configs { get; set; }
     }
 }
