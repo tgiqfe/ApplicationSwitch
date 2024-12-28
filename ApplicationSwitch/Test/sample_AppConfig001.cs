@@ -7,7 +7,8 @@ namespace ApplicationSwitch.Test
 {
     internal class sample_AppConfig001
     {
-        public void test()
+        /*
+        public static void Test01()
         {
             var root = new AppConfigRoot()
             {
@@ -40,5 +41,6 @@ namespace ApplicationSwitch.Test
                  Build().
                  Serialize(Console.Out, root);
         }
+        */
     }
 }

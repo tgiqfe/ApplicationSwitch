@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationSwitch.Lib.Manifest
+namespace ApplicationSwitch.Lib
 {
-    internal class SwitchBase
+    internal class AppConfigMetadata
     {
         public string Name { get; set; }
-
-        public virtual void ToHidden() { }
-
-        public virtual void ToVisible() { }
+        public string Description { get; set; }
+        public string Evacuate { get; set; }
     }
 }
