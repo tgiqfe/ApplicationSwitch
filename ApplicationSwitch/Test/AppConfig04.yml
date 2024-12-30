@@ -5,7 +5,7 @@
     Description: This is a sample AppConfig02
   Target:
     Enable: |-
-      tqWin00, tqWin001~005,
+      tqWin00, tqWin001~005, tqWin01
       #ここはコメントじゃない
     Disable:
   Rule:
@@ -17,5 +17,11 @@
       Name: Rule02
       Target: C:\Users\User\Downloads\PSTools.zip
     - Action: Registry
-      Name: Rule03
+      Name: Rule03_key
+      RegistryKey: HKEY_CURRENT_USER\Software\Test\aaaa
+    - Action: Registry
+      Name: Rule04_param
+      RegistryKey: HKEY_CURRENT_USER\Software\Test\bbbb
+      RegistryParam: ''
+
 

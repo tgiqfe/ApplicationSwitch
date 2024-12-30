@@ -22,16 +22,6 @@ namespace ApplicationSwitch.Lib.Rules
             }
         }
 
-        public virtual void Initialize()
-        {
-            if (string.IsNullOrEmpty(this.Name))
-            {
-                Logger.WriteLine("RuleFile, Name is empty.");
-                return;
-            }
-            Logger.WriteLine($"RuleFile, Rule name => {this.Name}");
-        }
-
         public virtual void EnableProcess() { }
 
         public virtual void DisableProcess() { }

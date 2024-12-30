@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic.FileIO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ApplicationSwitch.Lib.Rules
 {
@@ -6,9 +7,18 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string TargetPath { get; set; }
 
-        public override void Initialize()
+        public RuleFile(string name, string evacuate, string targetPath)
         {
-            base.Initialize();
+            this.Name = name;
+            this.AppEvacuate = evacuate;
+            this.TargetPath = targetPath;
+
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                Logger.WriteLine("RuleFile, Name is empty.");
+                return;
+            }
+            Logger.WriteLine($"RuleFile, Rule name => {this.Name}");
             this.Enabled = true;
         }
 
@@ -63,7 +73,7 @@ namespace ApplicationSwitch.Lib.Rules
             }
             else
             {
-                //  Target file or directory not found.
+                Logger.WriteLine("RuleFile, Target file or directory not found.");
             }
         }
     }
