@@ -37,16 +37,19 @@ namespace ApplicationSwitch.Lib.Rules
             if (File.Exists(source) && !File.Exists(this.TargetPath))
             {
                 //  File evacuate.
+                Logger.WriteLine($"RuleFile, File restore => {source} to {this.TargetPath}", 4);
                 FileSystem.CopyFile(source, this.TargetPath, true);
             }
             else if (Directory.Exists(source) && !Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
+                Logger.WriteLine($"RuleFile, Directory restore => {source} to {this.TargetPath}", 4);
                 FileSystem.CopyDirectory(source, this.TargetPath, true);
             }
             else
             {
-                //  move not eligible,
+                //  not applicable.
+                Logger.WriteLine("RuleFile, Restore not applicable.", 4);
             }
         }
 
@@ -64,16 +67,19 @@ namespace ApplicationSwitch.Lib.Rules
             if (File.Exists(this.TargetPath))
             {
                 //  File evacuate.
+                Logger.WriteLine($"RuleFile, File evacuate => {this.TargetPath} to {destination}", 4);
                 FileSystem.MoveFile(this.TargetPath, destination, true);
             }
             else if (Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
+                Logger.WriteLine($"RuleFile, Directory evacuate => {this.TargetPath} to {destination}", 4);
                 FileSystem.MoveDirectory(this.TargetPath, destination, true);
             }
             else
             {
-                Logger.WriteLine("RuleFile, Target file or directory not found.");
+                //  not applicable.
+                Logger.WriteLine("RuleFile, Evacuate not applicable.", 4);
             }
         }
     }

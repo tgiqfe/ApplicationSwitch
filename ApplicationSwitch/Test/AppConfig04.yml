@@ -5,9 +5,9 @@
     Description: This is a sample AppConfig02
   Target:
     Enable: |-
-      tqWin00, tqWin001~005, tqWin01
+      tqWin00, tqWin001~005, tqWin01,
       #ここはコメントじゃない
-    Disable:
+    Disable: 
   Rule:
     Rules:
     - Action: File
@@ -22,6 +22,6 @@
     - Action: Registry
       Name: Rule04_param
       RegistryKey: HKEY_CURRENT_USER\Software\Test\bbbb
-      RegistryParam: ''
+      RegistryParam: baito
 
 
