@@ -1,36 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.VisualBasic.FileIO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleFile : RuleBase
     {
-        public string Target { get; set; }
+        public string TargetPath { get; set; }
 
-        private string _evacuatePath { get { return Path.Combine(this.EvacuatePath, Name); } }
+        public RuleFile(string name, string evacuate, string targetPath)
+        {
+            this.Name = name;
+            this.AppEvacuate = evacuate;
+            this.TargetPath = targetPath;
 
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                Logger.WriteLine("RuleFile, Name is empty.");
+                return;
+            }
+            Logger.WriteLine($"RuleFile, Rule name => {this.Name}");
+            this.Enabled = true;
+        }
+
+        /// <summary>
+        /// file move process for Enable target.
+        /// </summary>
         public override void EnableProcess()
         {
-            var parent = Path.GetDirectoryName(this.Target);
+            var parent = Path.GetDirectoryName(this.TargetPath);
             if (!Directory.Exists(parent))
             {
                 Directory.CreateDirectory(parent);
             }
 
-            var source = Path.Combine(_evacuatePath, Path.GetFileName(this.Target));
-            if (File.Exists(source) && !File.Exists(this.Target))
+            var source = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.TargetPath));
+            if (File.Exists(source) && !File.Exists(this.TargetPath))
             {
                 //  File evacuate.
-                FileSystem.MoveFile(source, this.Target, true);
+                FileSystem.CopyFile(source, this.TargetPath, true);
             }
-            else if (Directory.Exists(source) && Directory.Exists(this.Target))
+            else if (Directory.Exists(source) && !Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
-                FileSystem.MoveDirectory(source, this.Target, true);
+                FileSystem.CopyDirectory(source, this.TargetPath, true);
             }
             else
             {
@@ -38,27 +50,30 @@ namespace ApplicationSwitch.Lib.Rules
             }
         }
 
+        /// <summary>
+        /// file move process for Disable target.
+        /// </summary>
         public override void DisableProcess()
         {
-            if (!Directory.Exists(_evacuatePath))
+            if (!Directory.Exists(this.AppEvacuatePath))
             {
-                Directory.CreateDirectory(_evacuatePath);
+                Directory.CreateDirectory(this.AppEvacuatePath);
             }
 
-            var destination = Path.Combine(_evacuatePath, Path.GetFileName(this.Target));
-            if (File.Exists(this.Target))
+            var destination = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.TargetPath));
+            if (File.Exists(this.TargetPath))
             {
                 //  File evacuate.
-                FileSystem.MoveFile(this.Target, _evacuatePath, true);
+                FileSystem.MoveFile(this.TargetPath, destination, true);
             }
-            else if (Directory.Exists(this.Target))
+            else if (Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
-                FileSystem.MoveDirectory(this.Target, _evacuatePath, true);
+                FileSystem.MoveDirectory(this.TargetPath, destination, true);
             }
             else
             {
-                //  Target file or directory not found.
+                Logger.WriteLine("RuleFile, Target file or directory not found.");
             }
         }
     }

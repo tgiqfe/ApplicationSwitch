@@ -20,12 +20,11 @@ namespace ApplicationSwitch.Test
                     {
                         Name = "AppConfig02",
                         Description = "This is a sample AppConfig02",
-                        Evacuate = @"C:\ProgramData\Caches\AppConfig02",
                     },
                     Target = new AppConfigTarget()
                     {
-                        Enable = "aaaa",
-                        Disable = "bbbb",
+                        EnableTargets = "aaaa",
+                        DisableTargets = "bbbb",
                     },
                     Rule = new AppConfigRule()
                     {

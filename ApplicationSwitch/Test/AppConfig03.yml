@@ -2,10 +2,10 @@
   Metadata:
     Name: AppConfig02
     Description: This is a sample AppConfig02
-    Evacuate: C:\ProgramData\Caches\AppConfig02
   Target:
-    Enable: aaaa
-    Disable: bbbb
+    Enable: |-
+      tqWin00, tqWin001~005,
+    Disable: tqWin0*
   Rule:
     Rules:
     - Action: File

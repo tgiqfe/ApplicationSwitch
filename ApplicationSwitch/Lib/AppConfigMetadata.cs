@@ -10,6 +10,5 @@ namespace ApplicationSwitch.Lib
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Evacuate { get; set; }
     }
 }
