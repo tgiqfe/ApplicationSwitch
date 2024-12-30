@@ -1,36 +1,25 @@
 ﻿using ApplicationSwitch;
 using ApplicationSwitch.Lib;
-using ApplicationSwitch.Lib.Rules;
-using ApplicationSwitch.Lib.Yml;
-using ApplicationSwitch.Test;
-using YamlDotNet.Serialization;
+using System.Diagnostics;
 
+Environment.CurrentDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+var setting = DataSerializer.Load<Setting>("setting.yml");
+if (!Directory.Exists(setting.LogDirectory))
+{
+    Directory.CreateDirectory(setting.LogDirectory);
+}
+Logger.LogFile =
+    Path.Combine(setting.LogDirectory, "AppSwitch_" + Path.Combine(DateTime.Now.ToString("yyyyMMdd")) + ".log");
+
+Logger.WriteLine("Start Application switch.", 0);
 
 var path3 = @"..\..\..\Test\AppConfig03.yml";
-//var app = AppRoot.Load(path2);
-//app.Show();
-
-//sample_AppConfig002.Test01();
-//DataSerializer.Save(path3, app);
-
-
-//var app = DataSerializer.Load<AppRoot>(path2);
-//DataSerializer.Show(app);
-
-
-
 var app = DataSerializer.Load<AppRoot>(path3);
-DataSerializer.Show(app);
-
-app.ProcessFromRule();
+app.ProcessRules();
 
 
-//sample_AppConfig003.Test01();
+Logger.WriteLine("End Application switch.", 0);
 
-
-
-
-
-
-
+#if DEBUG
 Console.ReadLine();
+#endif

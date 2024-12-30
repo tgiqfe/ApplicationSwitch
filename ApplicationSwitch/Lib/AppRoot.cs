@@ -9,11 +9,9 @@ namespace ApplicationSwitch.Lib
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
-        public void ProcessFromRule()
+        public void ProcessRules()
         {
             var endis = this.Config.Target.CheckEnDis(Environment.MachineName);
-            Console.WriteLine(endis);
-            /*
             switch (endis)
             {
                 case true:
@@ -33,8 +31,6 @@ namespace ApplicationSwitch.Lib
                 case null:
                     break;
             }
-            */
         }
-
     }
 }

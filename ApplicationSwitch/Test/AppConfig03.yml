@@ -5,9 +5,8 @@
     Evacuate: C:\ProgramData\Caches\AppConfig02
   Target:
     Enable: |-
-      tqWin00, tqWin001~005,
-      tqWin0*,
-    Disable: bbbb
+      tqWin00, tqWin001~005, tqWin0*
+    Disable:
   Rule:
     Rules:
     - Action: File

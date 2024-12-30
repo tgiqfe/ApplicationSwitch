@@ -11,9 +11,14 @@ namespace ApplicationSwitch
 {
     internal class DataSerializer
     {
-        public static T Load<T>(string path)
+        public static T Load<T>(string path) where T : new()
         {
-            return new Deserializer().Deserialize<T>(File.ReadAllText(path));
+            try
+            {
+                return new Deserializer().Deserialize<T>(File.ReadAllText(path));
+            }
+            catch { }
+            return new T();
         }
 
         public static void Save(string path, object obj)
