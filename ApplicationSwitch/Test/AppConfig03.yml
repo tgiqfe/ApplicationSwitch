@@ -4,7 +4,9 @@
     Description: This is a sample AppConfig02
     Evacuate: C:\ProgramData\Caches\AppConfig02
   Target:
-    Enable: aaaa
+    Enable: |-
+      tqWin00, tqWin001~005,
+      tqWin0*,
     Disable: bbbb
   Rule:
     Rules:

@@ -6,8 +6,7 @@ using ApplicationSwitch.Test;
 using YamlDotNet.Serialization;
 
 
-var path2 = @"..\..\..\Test\AppConfig02.yml";
-//var path3 = @"..\..\..\Test\AppConfig03.yml";
+var path3 = @"..\..\..\Test\AppConfig03.yml";
 //var app = AppRoot.Load(path2);
 //app.Show();
 
@@ -20,11 +19,13 @@ var path2 = @"..\..\..\Test\AppConfig02.yml";
 
 
 
-var app = DataSerializer.Load<AppRoot>(path2);
+var app = DataSerializer.Load<AppRoot>(path3);
+DataSerializer.Show(app);
+
 app.ProcessFromRule();
 
 
-sample_AppConfig003.Test01();
+//sample_AppConfig003.Test01();
 
 
 

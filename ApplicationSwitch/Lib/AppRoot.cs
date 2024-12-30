@@ -9,79 +9,32 @@ namespace ApplicationSwitch.Lib
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
-
-
         public void ProcessFromRule()
         {
-            var endis = CheckEnDis();
-            if (endis == null) return;
-            RuleProcess((bool)endis);
-        }
-
-        /// <summary>
-        /// Check Enable/Disable by HostName.
-        /// </summary>
-        /// <returns></returns>
-        private bool? CheckEnDis()
-        {
-            IEnumerable<string> enableTargets = Regex.Replace(this.Config.Target.Enable, @"\r?\n", "").
-                Split(",").
-                Select(x => x.Trim());
-            IEnumerable<string> disableTargets = Regex.Replace(this.Config.Target.Disable, @"\r?\n", "").
-                Split(",").
-                Select(x => x.Trim());
-
-            isMatch(enableTargets, Environment.MachineName);
-
-
-
-            //this.Configs.Target;
-            //ここでホスト名をもとにしてEnable/Disableを判定
-            return true;
-
-            bool isMatch(IEnumerable<string> targets, string hostName)
+            var endis = this.Config.Target.CheckEnDis(Environment.MachineName);
+            Console.WriteLine(endis);
+            /*
+            switch (endis)
             {
-                foreach (var target in targets)
-                {
-                    if (target == "*")
+                case true:
+                    foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
-                        return true;
+                        var rule = ruleTemplate.ConvertToRule(this.Config.Metadata.Evacuate);
+                        rule.EnableProcess();
                     }
-                    else if (target.Contains("*"))
+                    break;
+                case false:
+                    foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
-
+                        var rule = ruleTemplate.ConvertToRule(this.Config.Metadata.Evacuate);
+                        rule.DisableProcess();
                     }
-                    else if (target.Contains("-"))
-                    {
-
-                    }
-                    else
-                    {
-                        return target.Equals(hostName, StringComparison.OrdinalIgnoreCase);
-                    }
-                }
-                return false;
+                    break;
+                case null:
+                    break;
             }
+            */
         }
 
-        /// <summary>
-        /// Rule process from rule.
-        /// </summary>
-        /// <param name="endis"></param>
-        private void RuleProcess(bool endis)
-        {
-            foreach (var ruleTemplate in this.Config.Rule.Rules)
-            {
-                var rule = ruleTemplate.ConvertToRule(this.Config.Metadata.Evacuate);
-                if (endis)
-                {
-                    rule.EnableProcess();
-                }
-                else
-                {
-                    rule.DisableProcess();
-                }
-            }
-        }
     }
 }
