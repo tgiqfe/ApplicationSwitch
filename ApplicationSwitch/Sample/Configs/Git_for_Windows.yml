@@ -1,0 +1,18 @@
+﻿App:
+  # Git for Windows
+  Metadata:
+    Name: GitforWindows
+    Description: Sample Git for Windows
+  Target:
+    Enable: |-
+      WinPC00, WinPC001~005, WinPC-a*,
+    Disable: 
+  Rule:
+    Rules:
+    - Action: File
+      Name: Rule01
+      TargetPath: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git
+    - Action: Command
+      Name: Rule02
+      EnableCommand: cmd /c attrib -H "%USERPROFILE%\Downloads\sample"
+      DisableCommand: cmd /c attrib +H "%USERPROFILE%\Downloads\sample"
