@@ -35,26 +35,53 @@ namespace ApplicationSwitch.Lib.Rules
 
         #region command text functions
 
-        private static (string, string) GetCommandText(string commandText)
+        private static Process GetCommandProcess(string commandText)
         {
             string command = commandText.Trim();
             if (command.Trim().StartsWith("\""))
             {
-                return (
-                    command.Substring(1, command.IndexOf("\"", 1) - 1).Trim(),
-                    command.Substring(command.IndexOf("\"", 1) + 1).Trim());
+                return new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = command.Substring(1, command.IndexOf("\"", 1) - 1).Trim(),
+                        Arguments = command.Substring(command.IndexOf("\"", 1) + 1).Trim(),
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
             }
             else if (command.Trim().Contains(" "))
             {
-                return (
-                    command.Substring(0, command.IndexOf(" ")).Trim(),
-                    command.Substring(command.IndexOf(" ") + 1).Trim());
+                return new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = command.Substring(0, command.IndexOf(" ")).Trim(),
+                        Arguments = command.Substring(command.IndexOf(" ") + 1).Trim(),
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
             }
-            return (command, "");
+            else
+            {
+                return new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = command,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+            }
+
         }
 
-        private static Process GetScriptProcess(string scriptPath)
+        private static Process GetScriptProcess(string scriptPathText)
         {
+            string scriptPath = scriptPathText.Trim().Trim('\"').Trim('\'');
             string extension = Path.GetExtension(scriptPath).ToLower();
             return extension switch
             {
@@ -101,20 +128,23 @@ namespace ApplicationSwitch.Lib.Rules
             if (!string.IsNullOrEmpty(this.EnableCommand))
             {
                 Logger.WriteLine($"RuleCommand, Execute enable Command => {this.EnableCommand}", 4);
-                (var command, var arguments) = GetCommandText(this.EnableCommand);
-                using (var proc = new Process())
+                using (var proc = GetCommandProcess(this.EnableCommand))
                 {
-                    proc.StartInfo.FileName = command;
-                    proc.StartInfo.Arguments = arguments;
-                    proc.StartInfo.UseShellExecute = false;
-                    proc.StartInfo.CreateNoWindow = true;
-                    proc.Start();
-                    proc.WaitForExit();
+                    if (proc != null)
+                    {
+                        proc.Start();
+                        proc.WaitForExit();
+                    }
                 }
             }
             else if (!string.IsNullOrEmpty(this.EnableScript))
             {
-                Logger.WriteLine($"RuleCommand, Execute enable Script => {this.EnableScript}", 4);
+                if(!File.Exists(this.EnableScript))
+                {
+                    Logger.WriteLine($"RuleCommand, Script file not found => {this.EnableScript}", 4);
+                    return;
+                }
+                Logger.WriteLine($"RuleCommand, Execute enable script => {this.EnableScript}", 4);
                 using (var proc = GetScriptProcess(this.EnableScript))
                 {
                     if (proc != null)
@@ -134,20 +164,23 @@ namespace ApplicationSwitch.Lib.Rules
             if (!string.IsNullOrEmpty(this.DisableCommand))
             {
                 Logger.WriteLine($"RunCommand, Execute disable Command => {this.DisableCommand}", 4);
-                (var command, var arguments) = GetCommandText(this.DisableCommand);
-                using (var proc = new Process())
+                using (var proc = GetCommandProcess(this.DisableCommand))
                 {
-                    proc.StartInfo.FileName = command;
-                    proc.StartInfo.Arguments = arguments;
-                    proc.StartInfo.UseShellExecute = false;
-                    proc.StartInfo.CreateNoWindow = true;
-                    proc.Start();
-                    proc.WaitForExit();
+                    if(proc != null)
+                    {
+                        proc.Start();
+                        proc.WaitForExit();
+                    }
                 }
             }
             else if (!string.IsNullOrEmpty(this.DisableScript))
             {
-                Logger.WriteLine($"RuleCommand, Execute disable Script => {this.DisableScript}", 4);
+                if (!File.Exists(this.DisableScript))
+                {
+                    Logger.WriteLine($"RuleCommand, Script file not found => {this.DisableScript}", 4);
+                    return;
+                }
+                Logger.WriteLine($"RuleCommand, Execute disable script => {this.DisableScript}", 4);
                 using (var proc = GetScriptProcess(this.DisableScript))
                 {
                     if (proc != null)

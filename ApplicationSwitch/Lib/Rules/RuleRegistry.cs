@@ -200,6 +200,10 @@ namespace ApplicationSwitch.Lib.Rules
                         proc.WaitForExit();
                     }
                 }
+                else
+                {
+                    Logger.WriteLine($"RuleRegistry, Registry key restore skip. {this.RegistryKey}", 4);
+                }
             }
             else
             {
@@ -218,6 +222,10 @@ namespace ApplicationSwitch.Lib.Rules
                             StringToRegistryValue(backup.Value, StringToValueKind(backup.Type)),
                             StringToValueKind(backup.Type));
                     }
+                }
+                else
+                {
+                    Logger.WriteLine($"RuleRegistry, Registry param restore skip. {this.RegistryKey} / {nameForLog}", 4);
                 }
             }
         }

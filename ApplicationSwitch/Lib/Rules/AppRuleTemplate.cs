@@ -1,12 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Serialization;
-
-namespace ApplicationSwitch.Lib.Rules
+﻿namespace ApplicationSwitch.Lib.Rules
 {
     internal class AppRuleTemplate
     {
@@ -22,6 +14,7 @@ namespace ApplicationSwitch.Lib.Rules
 
         private readonly static string[] candidate_File = new string[] { "File", "fil", "filemove" };
         private readonly static string[] candidate_Registry = new string[] { "Registry", "reg", "RegistryKey", "RegistryValue", "RegistryParam" };
+        private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
 
         public RuleBase ConvertToRule(string evacuate)
         {
@@ -31,14 +24,20 @@ namespace ApplicationSwitch.Lib.Rules
                     this.Name,
                     evacuate,
                     this.TargetPath),
-                string s when candidate_Registry.Any(x => x.Equals(x, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
+                string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
                     this.Name,
                     evacuate,
                     this.RegistryKey,
                     this.RegistryParam),
+                string s when candidate_Command.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleCommand(
+                    this.Name,
+                    evacuate,
+                    this.EnableCommand,
+                    this.DisableCommand,
+                    this.EnableScript,
+                    this.DisableScript),
                 _ => null
             };
-
         }
     }
 }
