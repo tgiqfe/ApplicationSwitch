@@ -28,7 +28,7 @@ namespace ApplicationSwitch.Lib.Rules
                 {
                     Name = this.Name,
                     AppEvacuate = evacuate,
-                    Target = this.Target,
+                    TargetPath = this.Target,
                 },
                 _ => null
             };

@@ -33,7 +33,7 @@ namespace ApplicationSwitch.Lib
                     Select(x => x.Trim()).
                     Where(x => !string.IsNullOrEmpty(x)).
                     Select(x => new ConfigTarget(x));
-                return _enableConfigTargets;
+                return _disableConfigTargets;
             }
         }
 

@@ -4,28 +4,35 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleFile : RuleBase
     {
-        public string Target { get; set; }
+        public string TargetPath { get; set; }
 
-        //private string _evacuatePath { get { return Path.Combine(this.AppEvacuate, Name); } }
+        public override void Initialize()
+        {
+            base.Initialize();
+            this.Enabled = true;
+        }
 
+        /// <summary>
+        /// file move process for Enable target.
+        /// </summary>
         public override void EnableProcess()
         {
-            var parent = Path.GetDirectoryName(this.Target);
+            var parent = Path.GetDirectoryName(this.TargetPath);
             if (!Directory.Exists(parent))
             {
                 Directory.CreateDirectory(parent);
             }
 
-            var source = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.Target));
-            if (File.Exists(source) && !File.Exists(this.Target))
+            var source = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.TargetPath));
+            if (File.Exists(source) && !File.Exists(this.TargetPath))
             {
                 //  File evacuate.
-                FileSystem.CopyFile(source, this.Target, true);
+                FileSystem.CopyFile(source, this.TargetPath, true);
             }
-            else if (Directory.Exists(source) && !Directory.Exists(this.Target))
+            else if (Directory.Exists(source) && !Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
-                FileSystem.CopyDirectory(source, this.Target, true);
+                FileSystem.CopyDirectory(source, this.TargetPath, true);
             }
             else
             {
@@ -33,6 +40,9 @@ namespace ApplicationSwitch.Lib.Rules
             }
         }
 
+        /// <summary>
+        /// file move process for Disable target.
+        /// </summary>
         public override void DisableProcess()
         {
             if (!Directory.Exists(this.AppEvacuatePath))
@@ -40,16 +50,16 @@ namespace ApplicationSwitch.Lib.Rules
                 Directory.CreateDirectory(this.AppEvacuatePath);
             }
 
-            var destination = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.Target));
-            if (File.Exists(this.Target))
+            var destination = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.TargetPath));
+            if (File.Exists(this.TargetPath))
             {
                 //  File evacuate.
-                FileSystem.MoveFile(this.Target, destination, true);
+                FileSystem.MoveFile(this.TargetPath, destination, true);
             }
-            else if (Directory.Exists(this.Target))
+            else if (Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
-                FileSystem.MoveDirectory(this.Target, destination, true);
+                FileSystem.MoveDirectory(this.TargetPath, destination, true);
             }
             else
             {

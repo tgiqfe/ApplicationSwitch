@@ -20,17 +20,24 @@ namespace ApplicationSwitch.Lib
                     foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
                         var rule = ruleTemplate.ConvertToRule(evacuate);
-                        rule.EnableProcess();
+                        if (rule?.Enabled ?? false)
+                        {
+                            rule.EnableProcess();
+                        }
                     }
                     break;
                 case false:
                     foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
                         var rule = ruleTemplate.ConvertToRule(evacuate);
-                        rule.DisableProcess();
+                        if (rule?.Enabled ?? false)
+                        {
+                            rule.DisableProcess();
+                        }
                     }
                     break;
                 case null:
+                    Logger.WriteLine($"{this.Config.Metadata.Name} is not applicable.");
                     break;
             }
         }

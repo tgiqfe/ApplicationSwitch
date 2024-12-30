@@ -10,6 +10,8 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Name { get; set; }
 
+        public bool Enabled { get; protected set; }
+
         public string AppEvacuate { get; set; }
 
         protected string AppEvacuatePath
@@ -18,6 +20,16 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 return Path.Combine(this.AppEvacuate, this.Name);
             }
+        }
+
+        public virtual void Initialize()
+        {
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                Logger.WriteLine("RuleFile, Name is empty.");
+                return;
+            }
+            Logger.WriteLine($"RuleFile, Rule name => {this.Name}");
         }
 
         public virtual void EnableProcess() { }
