@@ -47,7 +47,7 @@ namespace ApplicationSwitch.Lib
             var ret = EnableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
             if (ret) return true;
 
-            ret = DisableConfigTargets.Any(x => !x.IsMatch(hostName, baseName, num, length));
+            ret = DisableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
             if (ret) return false;
 
             return null;

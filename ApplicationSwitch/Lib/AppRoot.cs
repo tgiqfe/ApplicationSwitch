@@ -10,13 +10,38 @@ namespace ApplicationSwitch.Lib
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
+        private readonly static string[] yml_extensions = new string[] { ".yml", ".yaml" };
+
+        public static IEnumerable<AppRoot> LoadSettingFiles(string path)
+        {
+            if (File.Exists(path))
+            {
+                return new AppRoot[] { DataSerializer.Load<AppRoot>(path) };
+            }
+            else if (Directory.Exists(path))
+            {
+                return Directory.GetFiles(path).Where(x =>
+                {
+                    string extension = Path.GetExtension(x).ToLower();
+                    return yml_extensions.Any(y => y == extension);
+                }).Select(x => DataSerializer.Load<AppRoot>(x));
+            }
+            return Enumerable.Empty<AppRoot>();
+        }
+
         public void ProcessRules(string evacuateDirectory)
         {
+            if (this.Config == null)
+            {
+                Logger.WriteLine("Config is null. (when loading config file.)");
+                return;
+            }
             string evacuate = Path.Combine(evacuateDirectory, this.Config.Metadata.Name);
             var endis = this.Config.Target.CheckEnDis(Environment.MachineName);
             switch (endis)
             {
                 case true:
+                    Logger.WriteLine($"[Enable] {this.Config.Metadata.Name}", 0);
                     foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
                         var rule = ruleTemplate.ConvertToRule(evacuate);
@@ -27,6 +52,7 @@ namespace ApplicationSwitch.Lib
                     }
                     break;
                 case false:
+                    Logger.WriteLine($"[Disable] {this.Config.Metadata.Name}", 0);
                     foreach (var ruleTemplate in this.Config.Rule.Rules)
                     {
                         var rule = ruleTemplate.ConvertToRule(evacuate);
@@ -37,7 +63,7 @@ namespace ApplicationSwitch.Lib
                     }
                     break;
                 case null:
-                    Logger.WriteLine($"{this.Config.Metadata.Name} is not applicable.");
+                    Logger.WriteLine($"[Not applicable] {this.Config.Metadata.Name}", 0);
                     break;
             }
         }

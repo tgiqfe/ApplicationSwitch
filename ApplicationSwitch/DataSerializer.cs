@@ -1,10 +1,5 @@
-﻿using ApplicationSwitch.Lib;
-using ApplicationSwitch.Lib.Yml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ApplicationSwitch.Lib.Yml;
 using System.Text;
-using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch
@@ -15,7 +10,11 @@ namespace ApplicationSwitch
         {
             try
             {
-                return new Deserializer().Deserialize<T>(File.ReadAllText(path));
+                return new DeserializerBuilder().
+                    WithCaseInsensitivePropertyMatching().
+                    IgnoreUnmatchedProperties().
+                    Build().
+                    Deserialize<T>(File.ReadAllText(path));
             }
             catch { }
             return new T();
