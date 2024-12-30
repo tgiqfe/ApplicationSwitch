@@ -12,11 +12,13 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Action { get; set; }
         public string Name { get; set; }
-        public string Target { get; set; }
+        public string TargetPath { get; set; }
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
-        public string Execute { get; set; }
-        public string Arguments { get; set; }
+        public string EnableCommand { get; set; }
+        public string DisableCommand { get; set; }
+        public string EnableScript { get; set; }
+        public string DisableScript { get; set; }
 
         private readonly static string[] candidate_File = new string[] { "File", "fil", "filemove" };
         private readonly static string[] candidate_Registry = new string[] { "Registry", "reg", "RegistryKey", "RegistryValue", "RegistryParam" };
@@ -28,7 +30,7 @@ namespace ApplicationSwitch.Lib.Rules
                 string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile(
                     this.Name,
                     evacuate,
-                    this.Target),
+                    this.TargetPath),
                 string s when candidate_Registry.Any(x => x.Equals(x, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
                     this.Name,
                     evacuate,

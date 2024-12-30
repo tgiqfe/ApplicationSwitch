@@ -1,5 +1,6 @@
 ﻿using ApplicationSwitch;
 using ApplicationSwitch.Lib;
+using ApplicationSwitch.Test;
 using System.Diagnostics;
 
 //  Start process
@@ -15,10 +16,16 @@ Logger.WriteLine("Start Application switch.", 0);
 
 
 //  Main process
+/*
 var path = @"..\..\..\Test\AppConfig04.yml";
 var app = DataSerializer.Load<AppRoot>(path);
 app.ProcessRules(setting.EvacuateDirectory);
+*/
 
+sample_AppConfig003.Test02("ping localhost -n 5");
+sample_AppConfig003.Test02(@"net use \\localhost\Share$");
+sample_AppConfig003.Test02(@"powershell -File ""C:\Temp\Sample\App\setup.ps1""");
+sample_AppConfig003.Test02(@"""C:\Temp\aa bb\cc\dd e\test.exe"" arg1 arg2 arg3");
 
 
 //  End process

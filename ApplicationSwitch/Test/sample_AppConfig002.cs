@@ -34,13 +34,13 @@ namespace ApplicationSwitch.Test
                             {
                                 Action = "File",
                                 Name = "Rule01",
-                                Target = @"C:\Users\User\Downloads\utfunknown.zip",
+                                TargetPath = @"C:\Users\User\Downloads\utfunknown.zip",
                             },
                             new AppRuleTemplate()
                             {
                                 Action = "File",
                                 Name = "Rule02",
-                                Target = @"C:\Users\User\Downloads\PSTools.zip",
+                                TargetPath = @"C:\Users\User\Downloads\PSTools.zip",
                             },
                         },
                     },

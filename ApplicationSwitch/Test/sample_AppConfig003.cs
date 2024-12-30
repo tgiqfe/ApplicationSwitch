@@ -23,5 +23,28 @@ namespace ApplicationSwitch.Test
             return new Regex(word.Replace("*", ".*"), RegexOptions.IgnoreCase).IsMatch(input);
         }
 
+        public static void Test02(string commandText)
+        {
+            (var command, var args) = GetCommandText(commandText);
+            Console.WriteLine($"command: {command}, args: {args}");
+        }
+
+        private static (string, string) GetCommandText(string commandText)
+        {
+            string command = commandText.Trim();
+            if (command.Trim().StartsWith("\""))
+            {
+                return (
+                    command.Substring(1, command.IndexOf("\"", 1) - 1).Trim(),
+                    command.Substring(command.IndexOf("\"", 1) + 1).Trim());
+            }
+            else if (command.Trim().Contains(" "))
+            {
+                return (
+                    command.Substring(0, command.IndexOf(" ")).Trim(),
+                    command.Substring(command.IndexOf(" ") + 1).Trim());
+            }
+            return (command, "");
+        }
     }
 }
