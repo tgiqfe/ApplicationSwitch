@@ -10,7 +10,15 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Name { get; set; }
 
-        public string EvacuatePath { get; set; }
+        public string AppEvacuate { get; set; }
+
+        protected string AppEvacuatePath
+        {
+            get
+            {
+                return Path.Combine(this.AppEvacuate, this.Name);
+            }
+        }
 
         public virtual void EnableProcess() { }
 

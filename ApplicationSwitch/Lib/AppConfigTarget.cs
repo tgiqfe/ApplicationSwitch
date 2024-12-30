@@ -16,9 +16,10 @@ namespace ApplicationSwitch.Lib
         {
             get
             {
-                _enableConfigTargets ??= Regex.Replace(this.EnableTargets, @"\r?\n", "").
+                _enableConfigTargets ??= Regex.Replace(this.EnableTargets ?? "", @"\r?\n", ",").
                     Split(",").
                     Select(x => x.Trim()).
+                    Where(x => !string.IsNullOrEmpty(x)).
                     Select(x => new ConfigTarget(x));
                 return _enableConfigTargets;
             }
@@ -27,9 +28,10 @@ namespace ApplicationSwitch.Lib
         {
             get
             {
-                _disableConfigTargets ??= Regex.Replace(this.DisableTargets, @"\r?\n", "").
+                _disableConfigTargets ??= Regex.Replace(this.DisableTargets ?? "", @"\r?\n", ",").
                     Split(",").
                     Select(x => x.Trim()).
+                    Where(x => !string.IsNullOrEmpty(x)).
                     Select(x => new ConfigTarget(x));
                 return _enableConfigTargets;
             }

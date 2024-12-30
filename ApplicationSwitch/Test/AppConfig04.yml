@@ -1,11 +1,13 @@
 ﻿App:
+  # コメント
   Metadata:
     Name: AppConfig02
     Description: This is a sample AppConfig02
   Target:
     Enable: |-
-      tqWin00, tqWin001~005,
-    Disable: tqWin0*
+      tqWin00, tqWin001~005, tqWin0*
+      #ここはコメントじゃない
+    Disable:
   Rule:
     Rules:
     - Action: File

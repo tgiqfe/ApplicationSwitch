@@ -13,9 +13,9 @@ Logger.LogFile =
 
 Logger.WriteLine("Start Application switch.", 0);
 
-var path3 = @"..\..\..\Test\AppConfig03.yml";
-var app = DataSerializer.Load<AppRoot>(path3);
-app.ProcessRules();
+var path = @"..\..\..\Test\AppConfig04.yml";
+var app = DataSerializer.Load<AppRoot>(path);
+app.ProcessRules(setting.EvacuateDirectory);
 
 
 Logger.WriteLine("End Application switch.", 0);

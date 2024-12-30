@@ -27,7 +27,7 @@ namespace ApplicationSwitch.Lib.Rules
                 string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile()
                 {
                     Name = this.Name,
-                    EvacuatePath = evacuate,
+                    AppEvacuate = evacuate,
                     Target = this.Target,
                 },
                 _ => null

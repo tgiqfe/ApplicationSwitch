@@ -7,5 +7,6 @@ namespace ApplicationSwitch
     internal class Setting
     {
         public string LogDirectory { get; set; }
+        public string EvacuateDirectory { get; set; }
     }
 }

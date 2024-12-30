@@ -6,7 +6,7 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Target { get; set; }
 
-        private string _evacuatePath { get { return Path.Combine(this.EvacuatePath, Name); } }
+        //private string _evacuatePath { get { return Path.Combine(this.AppEvacuate, Name); } }
 
         public override void EnableProcess()
         {
@@ -16,7 +16,7 @@ namespace ApplicationSwitch.Lib.Rules
                 Directory.CreateDirectory(parent);
             }
 
-            var source = Path.Combine(_evacuatePath, Path.GetFileName(this.Target));
+            var source = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.Target));
             if (File.Exists(source) && !File.Exists(this.Target))
             {
                 //  File evacuate.
@@ -35,12 +35,12 @@ namespace ApplicationSwitch.Lib.Rules
 
         public override void DisableProcess()
         {
-            if (!Directory.Exists(_evacuatePath))
+            if (!Directory.Exists(this.AppEvacuatePath))
             {
-                Directory.CreateDirectory(_evacuatePath);
+                Directory.CreateDirectory(this.AppEvacuatePath);
             }
 
-            var destination = Path.Combine(_evacuatePath, Path.GetFileName(this.Target));
+            var destination = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.Target));
             if (File.Exists(this.Target))
             {
                 //  File evacuate.
