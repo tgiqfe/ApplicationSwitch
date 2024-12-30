@@ -6,6 +6,14 @@ namespace ApplicationSwitch
     {
         public static string LogFile = null;
 
+        public static void WriteRaw(string message)
+        {
+            using (var sw = new StreamWriter(LogFile, true, Encoding.UTF8))
+            {
+                sw.Write(message);
+            }
+        }
+
         public static void WriteLine(string message, int indent = 2)
         {
             string now = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss]");

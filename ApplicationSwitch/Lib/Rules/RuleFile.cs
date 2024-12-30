@@ -38,13 +38,28 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 //  File evacuate.
                 Logger.WriteLine($"RuleFile, File restore => {source} to {this.TargetPath}", 4);
-                FileSystem.CopyFile(source, this.TargetPath, true);
+                try
+                {
+                    FileSystem.CopyFile(source, this.TargetPath, true);
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    Logger.WriteLine($"RuleFile, File restore failed [{uae.Message}]", 4);
+                }
+
             }
             else if (Directory.Exists(source) && !Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
                 Logger.WriteLine($"RuleFile, Directory restore => {source} to {this.TargetPath}", 4);
-                FileSystem.CopyDirectory(source, this.TargetPath, true);
+                try
+                {
+                    FileSystem.CopyDirectory(source, this.TargetPath, true);
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    Logger.WriteLine($"RuleFile, Directory restore failed [{uae.Message}]", 4);
+                }
             }
             else
             {
@@ -68,13 +83,27 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 //  File evacuate.
                 Logger.WriteLine($"RuleFile, File evacuate => {this.TargetPath} to {destination}", 4);
-                FileSystem.MoveFile(this.TargetPath, destination, true);
+                try
+                {
+                    FileSystem.MoveFile(this.TargetPath, destination, true);
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    Logger.WriteLine($"RuleFile, File evacuate failed [{uae.Message}]", 4);
+                }
             }
             else if (Directory.Exists(this.TargetPath))
             {
                 //  Directory evacuate.
                 Logger.WriteLine($"RuleFile, Directory evacuate => {this.TargetPath} to {destination}", 4);
-                FileSystem.MoveDirectory(this.TargetPath, destination, true);
+                try
+                {
+                    FileSystem.MoveDirectory(this.TargetPath, destination, true);
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    Logger.WriteLine($"RuleFile, Directory evacuate failed [{uae.Message}]", 4);
+                }
             }
             else
             {

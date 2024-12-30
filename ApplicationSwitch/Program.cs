@@ -11,6 +11,7 @@ if (!Directory.Exists(setting.LogDirectory))
 }
 Logger.LogFile =
     Path.Combine(setting.LogDirectory, "AppSwitch_" + Path.Combine(DateTime.Now.ToString("yyyyMMdd")) + ".log");
+Logger.WriteRaw("--------------------------------\r\n");
 Logger.WriteLine("Start Application switch.", 0);
 
 
