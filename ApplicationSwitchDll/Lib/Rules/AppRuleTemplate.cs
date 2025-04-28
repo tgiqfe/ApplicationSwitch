@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppRuleTemplate
+    [SupportedOSPlatform("windows")]
+    public class AppRuleTemplate
     {
         public string Action { get; set; }
         public string Name { get; set; }

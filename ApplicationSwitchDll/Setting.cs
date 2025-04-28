@@ -3,6 +3,8 @@ namespace ApplicationSwitch
 {
     public class Setting
     {
+        public static string WorkDirectory = null;
+
         /// <summary>
         /// Log directory name or path.
         /// </summary>

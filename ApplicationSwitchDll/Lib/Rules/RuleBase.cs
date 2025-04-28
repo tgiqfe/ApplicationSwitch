@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class RuleBase
+    public class RuleBase
     {
         protected string RuleTypeName { get { return this.GetType().Name; } }
 
