@@ -8,6 +8,7 @@ namespace ApplicationSwitch
     {
         public string LogDirectory { get; set; }
         public string EvacuateDirectory { get; set; }
+        public bool EvacuateHidden { get; set; }
         public string ConfigDirectory { get; set; }
     }
 }

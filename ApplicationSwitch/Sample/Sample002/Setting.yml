@@ -1,0 +1,3 @@
+LogDirectory: Logs
+EvacuateDirectory: C:\ProgramData\AppSwitch
+ConfigDirectory: C:\tmp\ClientConfig\AppSwitch\Configs

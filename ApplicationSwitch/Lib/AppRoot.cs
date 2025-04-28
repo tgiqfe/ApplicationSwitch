@@ -29,6 +29,31 @@ namespace ApplicationSwitch.Lib
             return Enumerable.Empty<AppRoot>();
         }
 
+        /// <summary>
+        /// Load Rule files (from ConfigDirectory parameter)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static List<AppRoot> LoadRuleFiles(string path)
+        {
+            if (File.Exists(path))
+            {
+                return new List<AppRoot>(new AppRoot[]
+                {
+                    DataSerializer.Load<AppRoot>(path)
+                });
+            }
+            else if (Directory.Exists(path))
+            {
+                return Directory.GetFiles(path).Where(x =>
+                {
+                    string extension = Path.GetExtension(x).ToLower();
+                    return yml_extensions.Any(y => y == extension);
+                }).Select(x => DataSerializer.Load<AppRoot>(x)).ToList();
+            }
+            return new List<AppRoot>();
+        }
+
         public void ProcessRules(string evacuateDirectory)
         {
             if (this.Config == null)
