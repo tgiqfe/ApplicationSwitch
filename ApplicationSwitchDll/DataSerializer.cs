@@ -14,9 +14,9 @@ namespace ApplicationSwitch
                 var encoding = ret.Encoding;
                 return new DeserializerBuilder().
                            WithCaseInsensitivePropertyMatching().
-                    IgnoreUnmatchedProperties().
-                    Build().
-                    Deserialize<T>(File.ReadAllText(path, encoding));
+                           IgnoreUnmatchedProperties().
+                           Build().
+                           Deserialize<T>(File.ReadAllText(path, encoding));
             }
             catch { }
             return new T();

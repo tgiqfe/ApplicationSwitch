@@ -11,6 +11,7 @@ namespace ApplicationSwitch.Lib.Rules
         public string Action { get; set; }
         public string Name { get; set; }
         public string TargetPath { get; set; }
+        public string RemoveEmptyParent { get; set; }
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
         public string EnableCommand { get; set; }
@@ -29,7 +30,8 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile(
                     this.Name,
-                    this.TargetPath),
+                    this.TargetPath,
+                    this.RemoveEmptyParent),
                 _ => null,
             };
         }
