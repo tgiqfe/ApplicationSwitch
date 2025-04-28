@@ -8,6 +8,8 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleBase
     {
+        protected string RuleTypeName { get { return this.GetType().Name; } }
+
         /// <summary>
         /// Rule name
         /// </summary>
