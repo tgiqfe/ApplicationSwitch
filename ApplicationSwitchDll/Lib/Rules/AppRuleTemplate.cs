@@ -37,6 +37,10 @@ namespace ApplicationSwitch.Lib.Rules
                     this.Name,
                     this.TargetPath,
                     this.RemoveEmptyParent),
+                string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
+                    this.Name,
+                    this.RegistryKey,
+                    this.RegistryParam),
                 _ => null,
             };
         }

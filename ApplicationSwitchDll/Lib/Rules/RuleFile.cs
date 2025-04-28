@@ -9,6 +9,8 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleFile : RuleBase
     {
+        const string _RULE_NAME = "RuleFile";
+
         public string TargetPath { get; set; }
         public bool RemoveEmptyParent { get; set; }
 
@@ -27,10 +29,18 @@ namespace ApplicationSwitch.Lib.Rules
             //  Name parameter checking.
             if (string.IsNullOrEmpty(this.Name))
             {
-                Logger.WriteLine("RuleFile, Name is empty.");
+                Logger.WriteLine($"{_RULE_NAME}, Name is empty.");
                 return;
             }
-            Logger.WriteLine($"RuleFile, Rule name => {this.Name}");
+            Logger.WriteLine($"{_RULE_NAME}, Rule name => {this.Name}");
+
+            if(string.IsNullOrEmpty(this.TargetPath))
+            {
+                Logger.WriteLine($"{_RULE_NAME}, Target path is empty.");
+                return;
+            }
+            Logger.WriteLine($"{_RULE_NAME}, Target path => {this.TargetPath}");
+
             this.Enabled = true;
         }
 
@@ -43,18 +53,18 @@ namespace ApplicationSwitch.Lib.Rules
 
             if (File.Exists(EvacuateFilePath) && !File.Exists(this.TargetPath))
             {
-                Logger.WriteLine($"RuleFile, File restore => {EvacuateFilePath} to {this.TargetPath}", 4);
+                Logger.WriteLine($"{_RULE_NAME}, File restore => {EvacuateFilePath} to {this.TargetPath}", 4);
                 FileSystem.CopyFile(EvacuateFilePath, this.TargetPath, true);
             }
             else if (Directory.Exists(EvacuateFilePath) && !Directory.Exists(this.TargetPath))
             {
-                Logger.WriteLine($"RuleFile, Directory restore => {EvacuateFilePath} to {this.TargetPath}", 4);
+                Logger.WriteLine($"{_RULE_NAME}, Directory restore => {EvacuateFilePath} to {this.TargetPath}", 4);
                 FileSystem.CopyDirectory(EvacuateFilePath, this.TargetPath, true);
             }
             else
             {
                 //  not applicable.
-                Logger.WriteLine("RuleFile, Restore not applicable.", 4);
+                Logger.WriteLine($"{_RULE_NAME}, Restore not applicable.", 4);
             }
         }
 
@@ -71,32 +81,32 @@ namespace ApplicationSwitch.Lib.Rules
             //  evacuate.
             if (File.Exists(this.TargetPath))
             {
-                Logger.WriteLine($"RuleFile, File evacuate => {this.TargetPath} to {EvacuateFilePath}", 4);
+                Logger.WriteLine($"{_RULE_NAME}, File evacuate => {this.TargetPath} to {EvacuateFilePath}", 4);
                 FileSystem.MoveFile(this.TargetPath, EvacuateFilePath, true);
 
                 //  remove empty parent.
                 if (this.RemoveEmptyParent && Directory.GetFiles(this.TargetParent).Length > 0)
                 {
-                    Logger.WriteLine($"RuleFile, Remove empty parent => {this.TargetParent}", 4);
+                    Logger.WriteLine($"{_RULE_NAME}, Remove empty parent => {this.TargetParent}", 4);
                     Directory.Delete(this.TargetParent, true);
                 }
             }
             else if (Directory.Exists(this.TargetPath))
             {
-                Logger.WriteLine($"RuleFile, Directory evacuate => {this.TargetPath} to {EvacuateFilePath}", 4);
+                Logger.WriteLine($"{_RULE_NAME}, Directory evacuate => {this.TargetPath} to {EvacuateFilePath}", 4);
                 FileSystem.MoveDirectory(this.TargetPath, EvacuateFilePath, true);
 
                 //  remove empty parent.
                 if (this.RemoveEmptyParent && Directory.GetFiles(this.TargetParent).Length > 0)
                 {
-                    Logger.WriteLine($"RuleFile, Remove empty parent => {this.TargetParent}", 4);
+                    Logger.WriteLine($"{_RULE_NAME}, Remove empty parent => {this.TargetParent}", 4);
                     Directory.Delete(this.TargetParent, true);
                 }
             }
             else
             {
                 //  not applicable.
-                Logger.WriteLine("RuleFile, Evacuate not applicable.", 4);
+                Logger.WriteLine("{_RULE_NAME}, Evacuate not applicable.", 4);
             }
         }
     }
