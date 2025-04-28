@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ApplicationSwitch
+namespace ApplicationSwitch.Lib
 {
     internal class Item
     {
