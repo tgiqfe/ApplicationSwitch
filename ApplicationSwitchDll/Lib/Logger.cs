@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ApplicationSwitch
+namespace ApplicationSwitch.Lib
 {
     internal class Logger
     {

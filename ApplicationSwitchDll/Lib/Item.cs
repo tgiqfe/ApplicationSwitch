@@ -1,25 +1,24 @@
 ﻿using System.Diagnostics;
 
-namespace ApplicationSwitch
+namespace ApplicationSwitch.Lib
 {
     internal class Item
     {
-        private readonly string[] candidate_enable = 
-            new string[] { "Enable", "enable", "on", "true", "1", "true", "tru", "$true" };
-        private readonly string[] candidate_disable =
-            new string[] { "Disable", "disable", "off", "false", "0", "false", "fals", "$false" };
-
         internal string WorkDirectory { get; private set; }
         internal static string LogFile { get; private set; }
         internal static string EvacuateDirectory { get; private set; }
+        internal static string RulesDirectory { get; private set; }
+        internal static bool EvacuateDirectoryHidden { get; private set; }
+        internal static bool WorkDirectoryHidden { get; private set; }
 
         public void Initialize()
         {
             WorkDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             LogFile = Path.Combine(WorkDirectory, Setting.LogDirectory, "AppSwitch_" + Path.Combine(DateTime.Now.ToString("yyyyMMdd")) + ".log");
             EvacuateDirectory = Path.Combine(WorkDirectory, Setting.EvacuateDirectory);
+            RulesDirectory = Path.Combine(WorkDirectory, Setting.RulesDirectory);
+            EvacuateDirectoryHidden = Functions.IsEnable(Setting.EvacuateDirectoryHidden);
+            WorkDirectoryHidden = Functions.IsEnable(Setting.WordkDirectoryHidden);
         }
-
-
     }
 }

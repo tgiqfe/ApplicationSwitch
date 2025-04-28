@@ -1,11 +1,41 @@
 ﻿using ApplicationSwitch.Lib.Yml;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
-namespace ApplicationSwitch
+namespace ApplicationSwitch.Lib
 {
-    internal class DataSerializer
+    internal class Functions
     {
+        #region Enable/Disable Check
+
+        private readonly static string[] candidate_enable =
+            new string[] { "Enable", "enable", "on", "true", "1", "true", "tru", "$true" };
+        private readonly static string[] candidate_disable =
+            new string[] { "Disable", "disable", "off", "false", "0", "false", "fals", "$false" };
+
+        public static bool IsEnable(string text)
+        {
+            return candidate_enable.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static bool IsDisable(string text)
+        {
+            return candidate_disable.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase));
+        }
+
+        #endregion
+        #region Load / Save YAML
+
+        /// <summary>
+        /// Load yaml file and deserialize to objcet.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static T Load<T>(string path) where T : new()
         {
             try
@@ -22,6 +52,11 @@ namespace ApplicationSwitch
             return new T();
         }
 
+        /// <summary>
+        /// Save serialize to yaml file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="obj"></param>
         public static void Save(string path, object obj)
         {
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
@@ -34,6 +69,10 @@ namespace ApplicationSwitch
             }
         }
 
+        /// <summary>
+        /// Show object to console.
+        /// </summary>
+        /// <param name="obj"></param>
         public static void Show(object obj)
         {
             new SerializerBuilder().
@@ -42,5 +81,7 @@ namespace ApplicationSwitch
                 Build().
                 Serialize(Console.Out, obj);
         }
+
+        #endregion
     }
 }
