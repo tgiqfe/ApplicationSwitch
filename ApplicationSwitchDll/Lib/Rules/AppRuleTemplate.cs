@@ -11,6 +11,11 @@ namespace ApplicationSwitch.Lib.Rules
         public string Action { get; set; }
         public string Name { get; set; }
         public string TargetPath { get; set; }
+
+        /// <summary>
+        /// for RuleFile
+        /// When disabled, delete the parent folder.
+        /// </summary>
         public string RemoveEmptyParent { get; set; }
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
