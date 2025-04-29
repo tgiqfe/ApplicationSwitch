@@ -33,10 +33,5 @@ namespace ApplicationSwitch.Lib.Rules
             }
             return new List<AppRoot>();
         }
-
-        public static AppRoot LoadRuleFile(string path)
-        {
-            return File.Exists(path) ? Functions.Load<AppRoot>(path) : null;
-        }
     }
 }

@@ -3,6 +3,7 @@ using ApplicationSwitch.Lib.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@ namespace ApplicationSwitch.Sample.SampleRule
     {
         public static string Create()
         {
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             var appRoot = new AppRoot()
             {
                 Config = new AppConfig()
@@ -20,7 +23,7 @@ namespace ApplicationSwitch.Sample.SampleRule
                     {
                         Name = "Rule_File01",
                         Description = "Sample Rule File",
-                        Version = "1.0.0.1"
+                        Version = version,
                     },
                     Target = new AppConfigTarget()
                     {

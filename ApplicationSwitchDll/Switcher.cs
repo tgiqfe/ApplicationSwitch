@@ -23,5 +23,7 @@ namespace ApplicationSwitch
         {
             return File.Exists(path) ? Functions.Load<AppRoot>(path) : null;
         }
+
+
     }
 }
