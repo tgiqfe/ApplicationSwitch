@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ApplicationSwitch.Sample.SampleRule
 {
-    internal class Rule_File01
+    internal class Rule_File02
     {
         public static string Create()
         {
@@ -16,14 +16,15 @@ namespace ApplicationSwitch.Sample.SampleRule
                 {
                     Metadata = new AppConfigMetadata()
                     {
-                        Name = "Rule_File01",
+                        Name = "Rule_File02",
                         Description = "Sample Rule File",
                         Version = version,
                     },
                     Target = new AppConfigTarget()
                     {
-                        EnableTargets = "ClientPC-A01, ClientPC-A02, ClientPC-A03",
-                        DisableTargets = "ClientPC-B01, ClientPC-B02, ClientPC-B03"
+                        EnableTargets = "ClientPCA*, ClientPCB*, ClientPCC*\r\nAppPCA*, AppPCB*, AppPCC*, AppPCD*",
+                        DisableTargets = "ExampleA-*, ExampleB-*, ExampleC-*",
+                        PrimaryTarget = "Disable"
                     },
                     Rule = new AppConfigRule()
                     {

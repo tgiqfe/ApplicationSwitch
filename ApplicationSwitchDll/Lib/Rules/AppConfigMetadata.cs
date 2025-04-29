@@ -10,12 +10,36 @@ namespace ApplicationSwitch.Lib.Rules
 {
     public class AppConfigMetadata
     {
+        #region Parameter
+
+        /// <summary>
+        /// Rule file name (mandatory)
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Version
+        /// </summary>
         public string Version { get; set; }
+
+        #endregion
 
         private static readonly Version _currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
         private static readonly Regex _pattern_version = new Regex(@"^(\d+\.){0,3}\d+$");
+
+        /// <summary>
+        /// Parameter check
+        /// </summary>
+        /// <returns></returns>
+        public bool IsParameterAll()
+        {
+            return !string.IsNullOrEmpty(this.Name);
+        }
 
         /// <summary>
         /// Version check.

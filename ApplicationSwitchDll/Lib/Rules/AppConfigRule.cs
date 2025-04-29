@@ -8,22 +8,32 @@ namespace ApplicationSwitch.Lib.Rules
 {
     public class AppConfigRule
     {
+        #region Parameter
+
         public List<AppRuleTemplate> Rules { get; set; }
 
-        public bool NameDuplicateCheck()
+        #endregion
+
+        /// <summary>
+        /// Parameter check
+        /// </summary>
+        /// <returns></returns>
+        public bool IsParameterAll()
         {
+            return Rules.Any(x => !string.IsNullOrEmpty(x.Action) && !string.IsNullOrEmpty(x.Name));
+        }
+
+        public bool IsDuplicateName()
+        {
+            //  Duplicat name log output. (memo)
             /*
             Rules.GroupBy(x => x.Name.ToLower()).Where(g => g.Count() > 1)
                 .Select(g => g.Key)
                 .ToList()
                 .ForEach(x => Console.WriteLine($"Duplicate Rule Name: {x}"));
             */
-            var duplicateNames = Rules.GroupBy(x => x.Name.ToLower()).Where(x => x.Count() > 1);
-            if (duplicateNames.Count() > 0)
-            {
-                return false;
-            }
-            return true;
+
+            return !(Rules.GroupBy(x => x.Name.ToLower()).Any(x => x.Count() > 1));
         }
     }
 }

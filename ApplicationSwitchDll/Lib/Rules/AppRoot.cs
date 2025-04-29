@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
@@ -12,26 +13,88 @@ namespace ApplicationSwitch.Lib.Rules
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
-        private readonly static string[] yml_extensions = new string[] { ".yml", ".yaml" };
-
-        public static List<AppRoot> LoadRuleFiles(string path)
+        private string AppEvacuatePath
         {
-            if (File.Exists(path))
-            {
-                return new List<AppRoot>(new AppRoot[]
-                {
-                    Functions.Load<AppRoot>(path)
-                });
-            }
-            else if (Directory.Exists(path))
-            {
-                return Directory.GetFiles(path).Where(x =>
-                {
-                    string extension = Path.GetExtension(x).ToLower();
-                    return yml_extensions.Any(y => y == extension);
-                }).Select(x => Functions.Load<AppRoot>(x)).ToList();
-            }
-            return new List<AppRoot>();
+            get { return Path.Combine(Item.EvacuateDirectory, Config.Metadata.Name); }
         }
+
+        #region for test methods
+
+        /// <summary>
+        /// print yml.
+        /// </summary>
+        public void Show()
+        {
+            Functions.Show(this);
+        }
+
+        public string[] GetEnableTargets()
+        {
+            return Regex.Replace(this.Config.Target.EnableTargets ?? "", @"\r?\n", ",").
+                Split(",").
+                Select(x => x.Trim()).
+                Where(x => !string.IsNullOrEmpty(x)).
+                ToArray();
+        }
+
+        public string[] GetDisabletargets()
+        {
+            return Regex.Replace(this.Config.Target.DisableTargets ?? "", @"\r?\n", ",").
+                Split(",").
+                Select(x => x.Trim()).
+                Where(x => !string.IsNullOrEmpty(x)).
+                ToArray();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Varid version check from Metadata.
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckMetadata()
+        {
+            var ret = true;
+            ret &= Config.Metadata.IsParameterAll();
+            ret &= Config.Metadata.IsValidVersion();
+            return ret;
+        }
+
+        /// <summary>
+        /// Check target enable/disable.
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckTarget()
+        {
+            var ret = true;
+            ret &= Config.Target.IsParameterAll();
+            return ret;
+        }
+
+        /// <summary>
+        /// Duplicate name contain check.
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckRule()
+        {
+            var ret = true;
+            ret &= Config.Rule.IsParameterAll();
+            ret &= Config.Rule.IsDuplicateName();
+            return ret;
+        }
+
+        /// <summary>
+        /// hostname check. enable or disable or null;
+        ///     true => Enable process.
+        ///     false => Disable process.
+        ///     null => skip.
+        /// </summary>
+        /// <returns></returns>
+        public bool? CheckEnableOrDisable()
+        {
+            return this.Config.Target.CheckEnableOrDisable();
+        }
+
+
     }
 }

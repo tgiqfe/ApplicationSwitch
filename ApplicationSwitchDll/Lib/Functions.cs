@@ -53,10 +53,10 @@ namespace ApplicationSwitch.Lib
                 var ret = UtfUnknown.CharsetDetector.DetectFromFile(path).Detected;
                 var encoding = ret.Encoding;
                 return new DeserializerBuilder().
-                           WithCaseInsensitivePropertyMatching().
-                           IgnoreUnmatchedProperties().
-                           Build().
-                           Deserialize<T>(File.ReadAllText(path, encoding));
+                    WithCaseInsensitivePropertyMatching().
+                    IgnoreUnmatchedProperties().
+                    Build().
+                    Deserialize<T>(File.ReadAllText(path, encoding));
             }
             catch { }
             return new T();
