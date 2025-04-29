@@ -12,6 +12,11 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Action { get; set; }
         public string Name { get; set; }
+
+        /// <summary>
+        /// for RuleFile, for Hidden
+        /// process target file/directory.
+        /// </summary>
         public string TargetPath { get; set; }
 
         /// <summary>
@@ -19,6 +24,7 @@ namespace ApplicationSwitch.Lib.Rules
         /// When disabled, delete the parent folder.
         /// </summary>
         public string RemoveEmptyParent { get; set; }
+
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
         public string EnableCommand { get; set; }
@@ -31,18 +37,31 @@ namespace ApplicationSwitch.Lib.Rules
         private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
         private readonly static string[] candidate_Hidden = new string[] { "Hidden", "Hide", "Hiden" };
 
-        public RuleBase ConvertToRule()
+        public RuleBase ConvertToRule(string appEvacuate)
         {
             return this.Action switch
             {
                 string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile(
                     this.Name,
+                    appEvacuate,
                     this.TargetPath,
                     this.RemoveEmptyParent),
                 string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
                     this.Name,
+                    appEvacuate,
                     this.RegistryKey,
                     this.RegistryParam),
+                string s when candidate_Command.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleCommand(
+                    this.Name,
+                    appEvacuate,
+                    this.EnableCommand,
+                    this.DisableCommand,
+                    this.EnableScript,
+                    this.DisableScript),
+                string s when candidate_Hidden.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleHidden(
+                    this.Name,
+                    appEvacuate,
+                    this.TargetPath),
                 _ => null,
             };
         }

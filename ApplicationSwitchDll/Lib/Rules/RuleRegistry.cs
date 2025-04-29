@@ -26,7 +26,7 @@ namespace ApplicationSwitch.Lib.Rules
         private string EvacuateKeyPath { get; set; }
         private string EvacuateParamPath { get; set; }
 
-        public RuleRegistry(string name, string registryKey, string registryParam)
+        public RuleRegistry(string name, string appEvacuate, string registryKey, string registryParam)
         {
             this.Name = name;
             this.RegistryKey = registryKey;

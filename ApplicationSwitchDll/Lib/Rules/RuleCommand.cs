@@ -16,7 +16,7 @@ namespace ApplicationSwitch.Lib.Rules
         public string EnableScript { get; set; }
         public string DisableScript { get; set; }
 
-        public RuleCommand(string name, string enCmd, string disCmd, string enScript, string disScript)
+        public RuleCommand(string name, string appEvacuate, string enCmd, string disCmd, string enScript, string disScript)
         {
             this.Name = name;
             this.EnableCommand = enCmd;

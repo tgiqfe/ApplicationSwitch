@@ -12,7 +12,7 @@ namespace ApplicationSwitch.Lib.Rules
 
         public string TargetPath { get; set; }
 
-        public RuleHidden(string name, string targetPath)
+        public RuleHidden(string name, string appEvacuate, string targetPath)
         {
             this.Name = name;
             this.TargetPath = targetPath;

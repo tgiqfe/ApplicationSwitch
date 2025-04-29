@@ -17,7 +17,7 @@ namespace ApplicationSwitch.Lib.Rules
         private string TargetParent { get; set; }
         private string EvacuateFilePath { get; set; }
 
-        public RuleFile(string name, string targetPath, string removeEmptyParent)
+        public RuleFile(string name, string appEvacuate, string targetPath, string removeEmptyParent)
         {
             this.Name = name;
             this.TargetPath = targetPath;

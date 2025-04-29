@@ -10,6 +10,8 @@ namespace ApplicationSwitch.Lib.Rules
 {
     public class AppConfigTarget
     {
+        #region Parameter
+
         [YamlMember(Alias = "Enable")]
         public string EnableTargets { get; set; }
 
@@ -18,58 +20,41 @@ namespace ApplicationSwitch.Lib.Rules
 
         public string PrimaryTarget { get; set; }
 
-        private IEnumerable<ConfigTarget> _enableConfigTargets = null;
-        private IEnumerable<ConfigTarget> _disableConfigTargets = null;
-        private IEnumerable<ConfigTarget> EnableConfigTargets
-        {
-            get
-            {
-                _enableConfigTargets ??= Regex.Replace(this.EnableTargets ?? "", @"\r?\n", ",").
-                    Split(",").
-                    Select(x => x.Trim()).
-                    Where(x => !string.IsNullOrEmpty(x)).
-                    Select(x => new ConfigTarget(x));
-                return _enableConfigTargets;
-            }
-        }
-        private IEnumerable<ConfigTarget> DisableConfigTargets
-        {
-            get
-            {
-                _disableConfigTargets ??= Regex.Replace(this.DisableTargets ?? "", @"\r?\n", ",").
-                    Split(",").
-                    Select(x => x.Trim()).
-                    Where(x => !string.IsNullOrEmpty(x)).
-                    Select(x => new ConfigTarget(x));
-                return _disableConfigTargets;
-            }
-        }
+        #endregion
 
-        public bool? CheckEnableOrDisable(string hostName)
+        public bool? CheckEnableOrDisable()
         {
-            string numText = Regex.Match(hostName, @"\d*$").Value;
-            int? num = int.TryParse(numText, out int n) ? n : null;
-            string baseName = hostName.Substring(0, hostName.Length - numText.Length);
-            int length = hostName.Length;
-
             if (Functions.IsDisable(this.PrimaryTarget))
             {
-                var ret = DisableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
-                if (ret) return false;
+                var disRet = __GetTargets(DisableTargets).
+                    Any(x => x.IsMatch(Item.Hostname, Item.Hostname_baseName, Item.Hostname_number, Item.Hostname_length));
+                if (disRet) return false;
 
-                ret = EnableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
-                if (ret) return true;
+                var enRet = __GetTargets(EnableTargets).
+                    Any(x => x.IsMatch(Item.Hostname, Item.Hostname_baseName, Item.Hostname_number, Item.Hostname_length));
+                if (enRet) return true;
             }
             else
             {
-                var ret = EnableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
-                if (ret) return true;
+                var enRet = __GetTargets(EnableTargets).
+                    Any(x => x.IsMatch(Item.Hostname, Item.Hostname_baseName, Item.Hostname_number, Item.Hostname_length));
+                if (enRet) return true;
 
-                ret = DisableConfigTargets.Any(x => x.IsMatch(hostName, baseName, num, length));
-                if (ret) return false;
+                var disRet = __GetTargets(DisableTargets).
+                    Any(x => x.IsMatch(Item.Hostname, Item.Hostname_baseName, Item.Hostname_number, Item.Hostname_length));
+                if (disRet) return false;
             }
 
             return null;
+
+            IEnumerable<ConfigTarget> __GetTargets(string targetText)
+            {
+                return Regex.Replace(targetText ?? "", @"\r?\n", ",").
+                    Split(",").
+                    Select(x => x.Trim()).
+                    Where(x => !string.IsNullOrEmpty(x)).
+                    Select(x => new ConfigTarget(x));
+            }
         }
 
         #region ConfgTarget class
