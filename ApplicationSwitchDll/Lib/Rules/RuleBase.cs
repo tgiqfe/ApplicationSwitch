@@ -25,6 +25,9 @@ namespace ApplicationSwitch.Lib.Rules
         /// </summary>
         public bool Enabled { get; protected set; }
 
+        /// <summary>
+        /// Init parameter setting.
+        /// </summary>
         public virtual void Initialize() { }
 
         /// <summary>
@@ -36,5 +39,20 @@ namespace ApplicationSwitch.Lib.Rules
         /// /// Application Source -> Evacuate
         /// </summary>
         public virtual void DisableProcess() { }
+
+        /// <summary>
+        /// end process. for Enable or Disable process
+        /// </summary>
+        protected void EndProcess()
+        {
+            if (Item.HiddenEvacuateDirectory)
+            {
+                var attr = File.GetAttributes(Item.EvacuateDirectory);
+                if ((attr & FileAttributes.Hidden) != FileAttributes.Hidden)
+                {
+                    File.SetAttributes(Item.EvacuateDirectory, attr | FileAttributes.Hidden);
+                }
+            }
+        }
     }
 }

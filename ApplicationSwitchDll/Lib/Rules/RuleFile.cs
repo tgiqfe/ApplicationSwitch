@@ -69,6 +69,8 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 FileSystem.CopyDirectory(EvacuateFilePath, this.TargetPath, true);
             }
+
+            EndProcess();
         }
 
         /// <summary>
@@ -102,6 +104,8 @@ namespace ApplicationSwitch.Lib.Rules
                     Directory.Delete(this.TargetParent, true);
                 }
             }
+
+            EndProcess();
         }
     }
 }

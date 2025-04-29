@@ -162,6 +162,8 @@ namespace ApplicationSwitch.Lib.Rules
                     }
                 }
             }
+
+            EndProcess();
         }
 
         public override void DisableProcess()
@@ -192,6 +194,8 @@ namespace ApplicationSwitch.Lib.Rules
                     }
                 }
             }
+
+            EndProcess();
         }
     }
 }

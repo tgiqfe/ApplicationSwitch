@@ -13,11 +13,6 @@ namespace ApplicationSwitch.Lib.Rules
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
-        private string AppEvacuatePath
-        {
-            get { return Path.Combine(Item.EvacuateDirectory, Config.Metadata.Name); }
-        }
-
         #region for test methods
 
         /// <summary>
@@ -52,7 +47,7 @@ namespace ApplicationSwitch.Lib.Rules
         /// Varid version check from Metadata.
         /// </summary>
         /// <returns></returns>
-        public bool CheckMetadata()
+        public bool CheckMetadataParameter()
         {
             var ret = true;
             ret &= Config.Metadata.IsParameterAll();
@@ -64,7 +59,7 @@ namespace ApplicationSwitch.Lib.Rules
         /// Check target enable/disable.
         /// </summary>
         /// <returns></returns>
-        public bool CheckTarget()
+        public bool CheckTargetParameter()
         {
             var ret = true;
             ret &= Config.Target.IsParameterAll();
@@ -75,7 +70,7 @@ namespace ApplicationSwitch.Lib.Rules
         /// Duplicate name contain check.
         /// </summary>
         /// <returns></returns>
-        public bool CheckRule()
+        public bool CheckRuleParameter()
         {
             var ret = true;
             ret &= Config.Rule.IsParameterAll();
@@ -95,6 +90,13 @@ namespace ApplicationSwitch.Lib.Rules
             return this.Config.Target.CheckEnableOrDisable();
         }
 
-
+        /// <summary>
+        /// Convert setting => rule object.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<RuleBase> ConvertToRule()
+        {
+            return this.Config.Rule.Rules.Select(x => x.ConvertToRule2(this.Config.Metadata.Name));
+        }
     }
 }
