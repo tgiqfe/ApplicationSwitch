@@ -12,15 +12,30 @@ namespace ApplicationSwitch.Lib.Rules
     {
         #region Parameter
 
+        /// <summary>
+        /// Enable targets (enable or disable mandatory)
+        /// </summary>
         [YamlMember(Alias = "Enable")]
         public string EnableTargets { get; set; }
 
+        /// <summary>
+        /// Disable targets (enable or disable mandatory)
+        /// </summary>
         [YamlMember(Alias = "Disable")]
         public string DisableTargets { get; set; }
 
         public string PrimaryTarget { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Parameter check
+        /// </summary>
+        /// <returns></returns>
+        public bool IsParameterAll()
+        {
+            return !string.IsNullOrEmpty(this.EnableTargets) || !string.IsNullOrEmpty(this.DisableTargets);
+        }
 
         public bool? CheckEnableOrDisable()
         {

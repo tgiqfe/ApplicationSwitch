@@ -32,7 +32,6 @@ namespace ApplicationSwitch.Lib.Rules
             if (string.IsNullOrEmpty(this.EnableCommand) && string.IsNullOrEmpty(this.DisableCommand) &&
                 string.IsNullOrEmpty(this.EnableScript) && string.IsNullOrEmpty(this.DisableScript))
             {
-
                 return;
             }
 

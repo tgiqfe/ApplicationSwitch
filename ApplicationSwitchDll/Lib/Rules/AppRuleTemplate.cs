@@ -10,7 +10,14 @@ namespace ApplicationSwitch.Lib.Rules
     [SupportedOSPlatform("windows")]
     public class AppRuleTemplate
     {
+        /// <summary>
+        /// Rule action type (mandatory)
+        /// </summary>
         public string Action { get; set; }
+
+        /// <summary>
+        /// Rule name (mandatory)
+        /// </summary>
         public string Name { get; set; }
 
         /// <summary>

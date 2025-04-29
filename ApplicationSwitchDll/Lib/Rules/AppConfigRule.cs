@@ -14,6 +14,15 @@ namespace ApplicationSwitch.Lib.Rules
 
         #endregion
 
+        /// <summary>
+        /// Parameter check
+        /// </summary>
+        /// <returns></returns>
+        public bool IsParameterAll()
+        {
+            return Rules.Any(x => !string.IsNullOrEmpty(x.Action) && !string.IsNullOrEmpty(x.Name));
+        }
+
         public bool IsDuplicateName()
         {
             //  Duplicat name log output. (memo)

@@ -12,10 +12,14 @@ namespace ApplicationSwitch.Lib.Rules
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
-        [YamlIgnore]
-        public string AppEvacuatePath
+        private string AppEvacuatePath
         {
             get { return Path.Combine(Item.EvacuateDirectory, Config.Metadata.Name); }
+        }
+
+        public void Show()
+        {
+            Functions.Show(this);
         }
 
         /// <summary>
@@ -24,13 +28,22 @@ namespace ApplicationSwitch.Lib.Rules
         /// <returns></returns>
         public bool CheckMetadata()
         {
-            return Config.Metadata.IsValidVersion();
+            var ret = true;
+            ret &= Config.Metadata.IsParameterAll();
+            ret &= Config.Metadata.IsValidVersion();
+            return ret;
         }
 
+        /// <summary>
+        /// Check target enable/disable.
+        /// </summary>
+        /// <returns></returns>
         public bool CheckTarget()
         {
-            var ret = Config.Target.CheckEnableOrDisable();
-            return ret ?? true;
+            var ret = true;
+            ret &= Config.Target.IsParameterAll();
+            ret &= Config.Target.CheckEnableOrDisable() ?? true;
+            return ret;
         }
 
         /// <summary>
@@ -39,7 +52,10 @@ namespace ApplicationSwitch.Lib.Rules
         /// <returns></returns>
         public bool CheckRule()
         {
-            return Config.Rule.IsDuplicateName();
+            var ret = true;
+            ret &= Config.Rule.IsParameterAll();
+            ret &= Config.Rule.IsDuplicateName();
+            return ret;
         }
     }
 }
