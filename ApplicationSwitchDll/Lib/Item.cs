@@ -9,8 +9,6 @@ namespace ApplicationSwitch.Lib
 {
     internal class Item
     {
-        public static string LogFile { get; set; }
-
 
     }
 }

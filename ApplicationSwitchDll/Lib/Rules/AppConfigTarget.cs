@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppConfigTarget
+    public class AppConfigTarget
     {
         [YamlMember(Alias = "Enable")]
         public string EnableTargets { get; set; }

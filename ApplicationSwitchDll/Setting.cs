@@ -10,18 +10,16 @@ namespace ApplicationSwitch
     public class Setting
     {
         public string WorkDirectory { get; set; }
-        public string LogDirectory { get; set; }
         public string EvacuateDirectory { get; set; }
         public string RulesDirectory { get; set; }
         public string EvacuateDirectoryHidden { get; set; }
         public string WorkDirectoryHidden { get; set; }
 
-        public static Setting Load()
+        public static Setting GetInstance()
         {
             return new Setting()
             {
                 WorkDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
-                LogDirectory = "Logs",
                 EvacuateDirectory = "Evacuate",
                 RulesDirectory = "Rules",
                 EvacuateDirectoryHidden = "true",

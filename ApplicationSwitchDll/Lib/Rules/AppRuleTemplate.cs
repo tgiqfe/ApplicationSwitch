@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ApplicationSwitch.Lib.Rules
 {
     [SupportedOSPlatform("windows")]
-    internal class AppRuleTemplate
+    public class AppRuleTemplate
     {
         public string Action { get; set; }
         public string Name { get; set; }
@@ -31,7 +31,7 @@ namespace ApplicationSwitch.Lib.Rules
         private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
         private readonly static string[] candidate_Hidden = new string[] { "Hidden", "Hide", "Hiden" };
 
-        public RuleBase ConvertToRUle()
+        public RuleBase ConvertToRule()
         {
             return this.Action switch
             {

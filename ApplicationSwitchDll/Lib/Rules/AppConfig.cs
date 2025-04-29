@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppConfig
+    public class AppConfig
     {
         public AppConfigMetadata Metadata { get; set; }
         public AppConfigTarget Target { get; set; }

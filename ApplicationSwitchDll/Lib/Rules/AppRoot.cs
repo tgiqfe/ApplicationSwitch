@@ -7,14 +7,12 @@ using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppRoot
+    public class AppRoot
     {
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
 
         private readonly static string[] yml_extensions = new string[] { ".yml", ".yaml" };
-
-
 
         public static List<AppRoot> LoadRuleFiles(string path)
         {
@@ -34,6 +32,11 @@ namespace ApplicationSwitch.Lib.Rules
                 }).Select(x => Functions.Load<AppRoot>(x)).ToList();
             }
             return new List<AppRoot>();
+        }
+
+        public static AppRoot LoadRuleFile(string path)
+        {
+            return File.Exists(path) ? Functions.Load<AppRoot>(path) : null;
         }
     }
 }
