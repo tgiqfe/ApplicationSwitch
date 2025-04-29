@@ -24,7 +24,7 @@ namespace ApplicationSwitch.Lib.Rules
         {
             get
             {
-                return "";
+                return Path.Combine(Item.EvacuateDirectory, this.Name);
             }
         }
 

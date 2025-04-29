@@ -38,13 +38,17 @@ namespace ApplicationSwitch.Lib.Rules
             //  Name parameter checking.
             if (string.IsNullOrEmpty(this.Name))
             {
+                Logger.WriteLine($"{_RULE_NAME}, Name is empty.");
                 return;
             }
+            Logger.WriteLine($"{_RULE_NAME}, Rule name => {this.Name}");
 
             if (string.IsNullOrEmpty(this.RegistryKey))
             {
+                Logger.WriteLine($"{_RULE_NAME}, Registry key is empty.");
                 return;
             }
+            Logger.WriteLine($"{_RULE_NAME}, Registry key => {this.RegistryKey}");
 
             this.Enabled = true;
         }
@@ -190,6 +194,7 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 if (File.Exists(this.EvacuateKeyPath) && !RegistryExists(this.RegistryKey))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry key restore. => {this.RegistryKey}", 4);
                     using (var proc = new Process())
                     {
                         proc.StartInfo.FileName = "cmd";
@@ -200,6 +205,10 @@ namespace ApplicationSwitch.Lib.Rules
                         proc.WaitForExit();
                     }
                 }
+                else
+                {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry key restore skip. => {this.RegistryKey}", 4);
+                }
             }
             else
             {
@@ -208,6 +217,7 @@ namespace ApplicationSwitch.Lib.Rules
 
                 if (File.Exists(this.EvacuateParamPath) && !RegistryExists(this.RegistryKey, this.RegistryParam))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry param restore. {this.RegistryKey} / {nameForLog}", 4);
                     var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateParamPath, Encoding.UTF8));
                     using (var regKey = GetRegistryKey(this.RegistryKey, true, true))
                     {
@@ -216,6 +226,10 @@ namespace ApplicationSwitch.Lib.Rules
                             StringToRegistryValue(backup.Value, StringToValueKind(backup.Type)),
                             StringToValueKind(backup.Type));
                     }
+                }
+                else
+                {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry param restore skip. {this.RegistryKey} / {nameForLog}", 4);
                 }
             }
         }
@@ -229,11 +243,13 @@ namespace ApplicationSwitch.Lib.Rules
                 {
                     if (!RegistryExists(regKey))
                     {
+                        Logger.WriteLine($"{_RULE_NAME}, Registry key not found => {this.RegistryKey}", 4);
                         return;
                     }
                 }
                 using (var proc = new Process())
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, RegistryKey evacuate. => {this.RegistryKey}", 4);
                     proc.StartInfo.FileName = "cmd";
                     proc.StartInfo.Arguments = $"/c reg export \"{this.RegistryKey}\" \"{this.EvacuateKeyPath}\" /y";
                     proc.StartInfo.UseShellExecute = false;
@@ -243,6 +259,7 @@ namespace ApplicationSwitch.Lib.Rules
                 }
                 using (var parentKey = GetRegistryKey(Path.GetDirectoryName(this.RegistryKey), false, true))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry key remove. => {this.RegistryKey}", 4);
                     parentKey.DeleteSubKeyTree(Path.GetFileName(this.RegistryKey));
                 }
             }
@@ -255,9 +272,11 @@ namespace ApplicationSwitch.Lib.Rules
                 {
                     if (!RegistryExists(regKey, this.RegistryParam))
                     {
+                        Logger.WriteLine($"{_RULE_NAME}, Registry key or param not found. => {this.RegistryKey} / {nameForLog}", 4);
                         return;
                     }
 
+                    Logger.WriteLine($"{_RULE_NAME}, Registry param evacuate. => {this.RegistryKey} / {nameForLog}", 4);
                     var valueKind = regKey.GetValueKind(this.RegistryParam);
                     var content = JsonSerializer.Serialize(
                         new RegistryParamBackup()
@@ -271,6 +290,7 @@ namespace ApplicationSwitch.Lib.Rules
                 }
                 using (var regKey = GetRegistryKey(this.RegistryKey, false, true))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Registry param remove. => {this.RegistryKey} / {nameForLog}", 4);
                     regKey.DeleteValue(this.RegistryParam);
                 }
             }

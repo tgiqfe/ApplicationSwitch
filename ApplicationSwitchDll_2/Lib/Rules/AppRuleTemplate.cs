@@ -31,7 +31,7 @@ namespace ApplicationSwitch.Lib.Rules
         private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
         private readonly static string[] candidate_Hidden = new string[] { "Hidden", "Hide", "Hiden" };
 
-        public RuleBase ConvertToRule()
+        public RuleBase ConvertToRUle()
         {
             return this.Action switch
             {

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ApplicationSwitchDll": {
+      "commandName": "Executable",
+      "executablePath": "pwsh",
+      "commandLineArgs": "-ExecutionPolicy Unrestricted -NoExit -Command \"Import-Module \".\\ApplicationSwitch.dll\""
+    }
+  }
+}

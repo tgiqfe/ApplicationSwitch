@@ -27,12 +27,15 @@ namespace ApplicationSwitch.Lib.Rules
             //  Name parameter checking.
             if (string.IsNullOrEmpty(this.Name))
             {
+                Logger.WriteLine($"{_RULE_NAME}, Name is empty.");
                 return;
             }
+            Logger.WriteLine($"{_RULE_NAME}, Rule name => {this.Name}");
+
             if (string.IsNullOrEmpty(this.EnableCommand) && string.IsNullOrEmpty(this.DisableCommand) &&
                 string.IsNullOrEmpty(this.EnableScript) && string.IsNullOrEmpty(this.DisableScript))
             {
-
+                Logger.WriteLine($"{_RULE_NAME}, Enable and Disable command,script are empty.");
                 return;
             }
 
@@ -130,6 +133,7 @@ namespace ApplicationSwitch.Lib.Rules
         {
             if (!string.IsNullOrEmpty(this.EnableCommand))
             {
+                Logger.WriteLine($"{_RULE_NAME}, Execute enable Command => {this.EnableCommand}", 4);
                 using (var proc = GetCommandProcess(this.EnableCommand))
                 {
                     if (proc != null)
@@ -143,8 +147,10 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 if (!File.Exists(this.EnableScript))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Script file not found => {this.EnableScript}", 4);
                     return;
                 }
+                Logger.WriteLine($"{_RULE_NAME}, Execute enable script => {this.EnableScript}", 4);
                 using (var proc = GetScriptProcess(this.EnableScript))
                 {
                     if (proc != null)
@@ -160,6 +166,7 @@ namespace ApplicationSwitch.Lib.Rules
         {
             if (!string.IsNullOrEmpty(this.DisableCommand))
             {
+                Logger.WriteLine($"{_RULE_NAME}, Execute disable Command => {this.DisableCommand}", 4);
                 using (var proc = GetCommandProcess(this.DisableCommand))
                 {
                     if (proc != null)
@@ -173,8 +180,10 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 if (!File.Exists(this.DisableScript))
                 {
+                    Logger.WriteLine($"{_RULE_NAME}, Script file not found => {this.DisableScript}", 4);
                     return;
                 }
+                Logger.WriteLine($"{_RULE_NAME}, Execute disable script => {this.DisableScript}", 4);
                 using (var proc = GetScriptProcess(this.DisableScript))
                 {
                     if (proc != null)
