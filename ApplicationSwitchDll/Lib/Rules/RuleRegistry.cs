@@ -12,19 +12,35 @@ using YamlDotNet.Core.Tokens;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    [SupportedOSPlatform("windows")]
     internal class RuleRegistry : RuleBase
     {
-        const string _RULE_NAME = "RuleRegistry";
-
-        const string evacuateKeyName = "registry_backup.reg";
-        const string evacuateParamName = "registry_backup.json";
+        const string _BACKUP_KEY_NAME = "registry_backup.reg";
+        const string _BACKUP_PARAM_NAME = "registry_backup.json";
 
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
 
+        private bool _isEvacuateRegKey = false;
+        private string _evacuateBackupFilePath = null;
+
+
         private string EvacuateKeyPath { get; set; }
         private string EvacuateParamPath { get; set; }
+
+        public RuleRegistry() { }
+
+        public override void Initialize()
+        {
+            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.RegistryKey);
+            _isEvacuateRegKey = this.RegistryParam == null;
+            _evacuateBackupFilePath = _isEvacuateRegKey ?
+                Path.Combine(this.AppEvacuatePath, _BACKUP_KEY_NAME) :
+                Path.Combine(this.AppEvacuatePath, _BACKUP_PARAM_NAME);
+        }
+
+
+
+
 
         public RuleRegistry(string name, string appEvacuate, string registryKey, string registryParam)
         {

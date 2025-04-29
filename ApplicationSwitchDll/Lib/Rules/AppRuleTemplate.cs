@@ -72,5 +72,44 @@ namespace ApplicationSwitch.Lib.Rules
                 _ => null,
             };
         }
+
+        public RuleBase ConvertToRule2(string parentNamae)
+        {
+            RuleBase rule = this.Action switch
+            {
+                string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile()
+                {
+                    Parent = parentNamae,
+                    Name = this.Name,
+                    TargetPath = this.TargetPath,
+                },
+                string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry()
+                {
+                    Parent = parentNamae,
+                    Name = this.Name,
+                    RegistryKey = this.RegistryKey,
+                    RegistryParam = this.RegistryParam,
+                },
+                string s when candidate_Command.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleCommand()
+                {
+                    Parent = parentNamae,
+                    Name = this.Name,
+                    EnableCommand = this.EnableCommand,
+                    DisableCommand = this.DisableCommand,
+                    EnableScript = this.EnableScript,
+                    DisableScript = this.DisableScript,
+                },
+                string s when candidate_Hidden.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleHidden()
+                {
+                    Parent = parentNamae,
+                    Name = this.Name,
+                    TargetPath = this.TargetPath,
+                },
+                _ => null,
+            };
+            rule.Initialize();
+
+            return rule;
+        }
     }
 }

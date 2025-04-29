@@ -9,12 +9,21 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleCommand : RuleBase
     {
-        const string _RULE_NAME = "RuleCommand";
-
         public string EnableCommand { get; set; }
         public string DisableCommand { get; set; }
         public string EnableScript { get; set; }
         public string DisableScript { get; set; }
+
+        public RuleCommand() { }
+
+        public override void Initialize()
+        {
+            this.Enabled = !string.IsNullOrEmpty(this.Name);
+            this.Enabled &= (!string.IsNullOrEmpty(this.EnableCommand) ||
+                !string.IsNullOrEmpty(this.DisableCommand) ||
+                !string.IsNullOrEmpty(this.EnableScript) ||
+                !string.IsNullOrEmpty(this.DisableScript));
+        }
 
         public RuleCommand(string name, string appEvacuate, string enCmd, string disCmd, string enScript, string disScript)
         {

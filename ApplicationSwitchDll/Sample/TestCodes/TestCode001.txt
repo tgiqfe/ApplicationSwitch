@@ -13,3 +13,4 @@ if(!($ret)){ exit }
 $ret = $ap.CheckRule()
 if(!($ret)){ exit }
 
+$hostNameMatch = $ap.CheckEnableOrDisable()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
@@ -17,10 +18,35 @@ namespace ApplicationSwitch.Lib.Rules
             get { return Path.Combine(Item.EvacuateDirectory, Config.Metadata.Name); }
         }
 
+        #region for test methods
+
+        /// <summary>
+        /// print yml.
+        /// </summary>
         public void Show()
         {
             Functions.Show(this);
         }
+
+        public string[] GetEnableTargets()
+        {
+            return Regex.Replace(this.Config.Target.EnableTargets ?? "", @"\r?\n", ",").
+                Split(",").
+                Select(x => x.Trim()).
+                Where(x => !string.IsNullOrEmpty(x)).
+                ToArray();
+        }
+
+        public string[] GetDisabletargets()
+        {
+            return Regex.Replace(this.Config.Target.DisableTargets ?? "", @"\r?\n", ",").
+                Split(",").
+                Select(x => x.Trim()).
+                Where(x => !string.IsNullOrEmpty(x)).
+                ToArray();
+        }
+
+        #endregion
 
         /// <summary>
         /// Varid version check from Metadata.
@@ -42,7 +68,6 @@ namespace ApplicationSwitch.Lib.Rules
         {
             var ret = true;
             ret &= Config.Target.IsParameterAll();
-            ret &= Config.Target.CheckEnableOrDisable() ?? true;
             return ret;
         }
 
@@ -57,5 +82,19 @@ namespace ApplicationSwitch.Lib.Rules
             ret &= Config.Rule.IsDuplicateName();
             return ret;
         }
+
+        /// <summary>
+        /// hostname check. enable or disable or null;
+        ///     true => Enable process.
+        ///     false => Disable process.
+        ///     null => skip.
+        /// </summary>
+        /// <returns></returns>
+        public bool? CheckEnableOrDisable()
+        {
+            return this.Config.Target.CheckEnableOrDisable();
+        }
+
+
     }
 }

@@ -9,13 +9,26 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleFile : RuleBase
     {
-        const string _RULE_NAME = "RuleFile";
-
         public string TargetPath { get; set; }
         public bool RemoveEmptyParent { get; set; }
 
+
         private string TargetParent { get; set; }
-        private string EvacuateFilePath { get; set; }
+        public string EvacuateFilePath { get; set; }
+
+
+
+
+        public RuleFile() { }
+
+        public override void Initialize()
+        {
+            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.TargetPath);
+        }
+
+
+
+
 
         public RuleFile(string name, string appEvacuate, string targetPath, string removeEmptyParent)
         {

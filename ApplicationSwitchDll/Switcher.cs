@@ -9,9 +9,15 @@ namespace ApplicationSwitch
 {
     public class Switcher
     {
-        public static void CreateSample()
+        public static void CreateSample(int num)
         {
-            string text = Rule_File01.Create();
+            string text = num switch
+            {
+                1 => Rule_File01.Create(),
+                2 => Rule_File02.Create(),
+                _ => "",
+            };
+
             Console.WriteLine(text);
         }
 

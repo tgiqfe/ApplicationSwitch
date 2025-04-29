@@ -8,9 +8,14 @@ namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleHidden : RuleBase
     {
-        const string _RULE_NAME = "RuleHidden";
-
         public string TargetPath { get; set; }
+
+        public RuleHidden() { }
+
+        public override void Initialize()
+        {
+            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.TargetPath);
+        }
 
         public RuleHidden(string name, string appEvacuate, string targetPath)
         {

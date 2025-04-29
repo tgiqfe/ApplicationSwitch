@@ -8,25 +8,24 @@ namespace ApplicationSwitch.Lib.Rules
 {
     public class RuleBase
     {
-        protected string RuleTypeName { get { return this.GetType().Name; } }
+        public string Parent { get; set; }
+
+        public string AppEvacuatePath
+        {
+            get { return Path.Combine(Item.EvacuateDirectory, this.Parent, this.Name); }
+        }
 
         /// <summary>
         /// Rule name
         /// </summary>
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Rule enable / disable
         /// </summary>
         public bool Enabled { get; protected set; }
 
-        protected string AppEvacuatePath
-        {
-            get
-            {
-                return "";
-            }
-        }
+        public virtual void Initialize() { }
 
         /// <summary>
         /// Application Evacuate -> Source
