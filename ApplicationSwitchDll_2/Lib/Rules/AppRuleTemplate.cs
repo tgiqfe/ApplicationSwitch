@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ApplicationSwitch.Lib.Rules
 {
     [SupportedOSPlatform("windows")]
-    internal class AppRuleTemplate
+    public class AppRuleTemplate
     {
         public string Action { get; set; }
         public string Name { get; set; }

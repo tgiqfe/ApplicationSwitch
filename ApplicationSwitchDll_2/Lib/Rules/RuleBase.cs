@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class RuleBase
+    public class RuleBase
     {
         protected string RuleTypeName { get { return this.GetType().Name; } }
 
@@ -24,7 +24,7 @@ namespace ApplicationSwitch.Lib.Rules
         {
             get
             {
-                return "";
+                return Path.Combine(Item.EvacuateDirectory, this.Name);
             }
         }
 

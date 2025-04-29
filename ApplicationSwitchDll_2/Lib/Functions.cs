@@ -17,21 +17,11 @@ namespace ApplicationSwitch.Lib
         private readonly static string[] candidate_disable =
             new string[] { "Disable", "disable", "off", "false", "0", "false", "fals", "$false" };
 
-        /// <summary>
-        /// bool text -> bool. (enable check).
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public static bool IsEnable(string text)
         {
             return candidate_enable.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase));
         }
 
-        /// <summary>
-        /// bool text -> bool. (disable check).
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
         public static bool IsDisable(string text)
         {
             return candidate_disable.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase));
@@ -90,15 +80,6 @@ namespace ApplicationSwitch.Lib
                 WithEmissionPhaseObjectGraphVisitor(x => new YamlIEnumerableSkipEmptyObjectGraphVisitor(x.InnerVisitor)).
                 Build().
                 Serialize(Console.Out, obj);
-        }
-
-        public static string ToText(object obj)
-        {
-            return new SerializerBuilder().
-                WithEventEmitter(x => new MultilineScalarFlowStyleEmitter(x)).
-                WithEmissionPhaseObjectGraphVisitor(x => new YamlIEnumerableSkipEmptyObjectGraphVisitor(x.InnerVisitor)).
-                Build().
-                Serialize(obj);
         }
 
         #endregion

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppConfigRule
+    public class AppConfigRule
     {
         public List<AppRuleTemplate> Rules { get; set; }
     }

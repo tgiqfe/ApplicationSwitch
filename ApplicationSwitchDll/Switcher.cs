@@ -1,61 +1,34 @@
-﻿using ApplicationSwitch.Lib;
-using ApplicationSwitch.Lib.Rules;
-using System.Runtime.Versioning;
+﻿using ApplicationSwitch;
+using ApplicationSwitch.Lib;
+using ApplicationSwitch.Sample.SampleRule;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ApplicationSwitch
 {
-    [SupportedOSPlatform("windows")]
     public class Switcher
     {
-        #region Common method
-
-        private static void InitialCommon()
+        private static void StartCommon(Setting setting)
         {
-            Item.Initialize();
-
-            if (!Directory.Exists(Item.LogDirectory))
-            {
-                Directory.CreateDirectory(Item.LogDirectory);
-            }
-            Logger.WriteLine("Start Application switch.", 0);
+            Item.LogFile =
+                Path.Combine(setting.LogDirectory, "AppSwitch_" + Path.Combine(DateTime.Now.ToString("yyyyMMdd")) + ".log");
         }
 
-        private static void FinishCommon()
+        private static void EndCommon(Setting setting)
         {
-            Logger.WriteLine("End Application switch.", 0);
         }
 
-        #endregion
-
-        public static void CreateSample_RuleFile()
+        public static void Show(Setting setting)
         {
-            var appRoot = Sample.CreateSample.RuleFile01.Create();
-            Functions.Show(appRoot);
+            StartCommon(setting);
+
+
+            EndCommon(setting);
         }
 
-        public static void CreateSample_RuleRegistry()
+        public static void CreateSample()
         {
-
+            string text = Rule_File01.Create();
+            Console.WriteLine(text);
         }
-
-        public static void CreateSample_RuleCommand()
-        {
-
-        }
-
-        public static void CreateSample_RuleHidden()
-        {
-
-        }
-
-        public static List<AppRoot> Load()
-        {
-            InitialCommon();
-            var ret = AppRoot.LoadRuleFiles(Item.RulesDirectory);
-            FinishCommon();
-
-            return ret;
-        }
-
     }
 }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppConfigRule
+    public class AppConfigMetadata
     {
-        public List<AppRuleTemplate> Rules { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

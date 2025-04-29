@@ -1,33 +1,32 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace ApplicationSwitch
 {
     public class Setting
     {
-        public static string WorkDirectory = null;
+        public string WorkDirectory { get; set; }
+        public string LogDirectory { get; set; }
+        public string EvacuateDirectory { get; set; }
+        public string RulesDirectory { get; set; }
+        public string EvacuateDirectoryHidden { get; set; }
+        public string WorkDirectoryHidden { get; set; }
 
-        /// <summary>
-        /// Log directory name or path.
-        /// </summary>
-        public static string LogDirectory = "Logs";
-
-        /// <summary>
-        /// Evacuate directory name or path.
-        /// </summary>
-        public static string EvacuateDirectory = "Evacuate";
-
-        /// <summary>
-        /// Rules directory name or path.
-        /// </summary>
-        public static string RulesDirectory = "Rules";
-
-        /// <summary>
-        /// Evacuate directory hidden attribute.
-        /// </summary>
-        public static string EvacuateDirectoryHidden = "true";
-
-        /// <summary>
-        /// Work directory hidden attribute.
-        /// </summary>
-        public static string WordkDirectoryHidden = "true";
+        public static Setting Load()
+        {
+            return new Setting()
+            {
+                WorkDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName),
+                LogDirectory = "Logs",
+                EvacuateDirectory = "Evacuate",
+                RulesDirectory = "Rules",
+                EvacuateDirectoryHidden = "true",
+                WorkDirectoryHidden = "true"
+            };
+        }
     }
 }

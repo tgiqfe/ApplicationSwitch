@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace ApplicationSwitch.Lib.Rules
 {
-    internal class AppRoot
+    public  class AppRoot
     {
         [YamlMember(Alias = "App")]
         public AppConfig Config { get; set; }
