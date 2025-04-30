@@ -23,6 +23,10 @@ namespace ApplicationSwitch.Lib.Rules
             return Rules.Any(x => !string.IsNullOrEmpty(x.Action) && !string.IsNullOrEmpty(x.Name));
         }
 
+        /// <summary>
+        /// Duplicate check
+        /// </summary>
+        /// <returns></returns>
         public bool IsDuplicateName()
         {
             //  Duplicat name log output. (memo)
