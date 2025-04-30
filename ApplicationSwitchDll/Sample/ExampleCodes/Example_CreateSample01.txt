@@ -6,4 +6,8 @@
 
 [ApplicationSwitch.Switcher]::CreateSample(3)
 
+[ApplicationSwitch.Switcher]::CreateSample(4)
+
+[ApplicationSwitch.Switcher]::CreateSample(5)
+
 [ApplicationSwitch.Switcher]::Version

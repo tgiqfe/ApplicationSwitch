@@ -102,5 +102,16 @@ namespace ApplicationSwitch.Lib
         }
 
         #endregion
+
+        public static string ExpandEnvironmentText(string text)
+        {
+            string retText = text;
+            if (text.Contains("%"))
+            {
+                retText = Environment.ExpandEnvironmentVariables(retText);
+            }
+
+            return retText;
+        }
     }
 }

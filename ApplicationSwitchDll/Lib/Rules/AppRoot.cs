@@ -97,7 +97,7 @@ namespace ApplicationSwitch.Lib.Rules
         public RuleBase[] ConvertToRule()
         {
             return this.Config.Rule.Rules.
-                Select(x => x.ConvertToRule2(this.Config.Metadata.Name)).
+                Select(x => x.ConvertToRule(this.Config.Metadata.Name)).
                 ToArray();
         }
     }

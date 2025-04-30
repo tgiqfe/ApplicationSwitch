@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Sample\ExampleCodes\" />
+    <Folder Include="Sample\ExampleCodes\ExampleScript\" />
   </ItemGroup>
 
 </Project>

@@ -44,38 +44,7 @@ namespace ApplicationSwitch.Lib.Rules
         private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
         private readonly static string[] candidate_Hidden = new string[] { "Hidden", "Hide", "Hiden" };
 
-        /*
-        public RuleBase ConvertToRule(string appEvacuate)
-        {
-            return this.Action switch
-            {
-                string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile(
-                    this.Name,
-                    appEvacuate,
-                    this.TargetPath,
-                    this.RemoveEmptyParent),
-                string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry(
-                    this.Name,
-                    appEvacuate,
-                    this.RegistryKey,
-                    this.RegistryParam),
-                string s when candidate_Command.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleCommand(
-                    this.Name,
-                    appEvacuate,
-                    this.EnableCommand,
-                    this.DisableCommand,
-                    this.EnableScript,
-                    this.DisableScript),
-                string s when candidate_Hidden.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleHidden(
-                    this.Name,
-                    appEvacuate,
-                    this.TargetPath),
-                _ => null,
-            };
-        }
-        */
-
-        public RuleBase ConvertToRule2(string parentNamae)
+        public RuleBase ConvertToRule(string parentNamae)
         {
             RuleBase rule = this.Action switch
             {
@@ -83,7 +52,7 @@ namespace ApplicationSwitch.Lib.Rules
                 {
                     Parent = parentNamae,
                     Name = this.Name,
-                    TargetPath = this.TargetPath,
+                    TargetPath = Functions.ExpandEnvironmentText(this.TargetPath),
                     RemoveEmptyParent = Functions.IsEnable(this.RemoveEmptyParent),
                 },
                 string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry()
@@ -106,7 +75,7 @@ namespace ApplicationSwitch.Lib.Rules
                 {
                     Parent = parentNamae,
                     Name = this.Name,
-                    TargetPath = this.TargetPath,
+                    TargetPath = Functions.ExpandEnvironmentText(this.TargetPath),
                 },
                 _ => null,
             };

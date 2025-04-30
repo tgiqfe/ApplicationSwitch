@@ -19,32 +19,11 @@ namespace ApplicationSwitch.Lib.Rules
         public override void Initialize()
         {
             this.Enabled = !string.IsNullOrEmpty(this.Name);
-            this.Enabled &= (!string.IsNullOrEmpty(this.EnableCommand) ||
+            this.Enabled &=
+                (!string.IsNullOrEmpty(this.EnableCommand) ||
                 !string.IsNullOrEmpty(this.DisableCommand) ||
                 !string.IsNullOrEmpty(this.EnableScript) ||
                 !string.IsNullOrEmpty(this.DisableScript));
-        }
-
-        public RuleCommand(string name, string appEvacuate, string enCmd, string disCmd, string enScript, string disScript)
-        {
-            this.Name = name;
-            this.EnableCommand = enCmd;
-            this.DisableCommand = disCmd;
-            this.EnableScript = enScript;
-            this.DisableScript = disScript;
-
-            //  Name parameter checking.
-            if (string.IsNullOrEmpty(this.Name))
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty(this.EnableCommand) && string.IsNullOrEmpty(this.DisableCommand) &&
-                string.IsNullOrEmpty(this.EnableScript) && string.IsNullOrEmpty(this.DisableScript))
-            {
-                return;
-            }
-
-            this.Enabled = true;
         }
 
         #region command text functions
@@ -119,6 +98,16 @@ namespace ApplicationSwitch.Lib.Rules
                         CreateNoWindow = true
                     }
                 },
+                ".vbs" => new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = "wscript.exe",
+                        Arguments = $"\"{scriptPath}\"",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                },
                 ".exe" => new Process()
                 {
                     StartInfo = new ProcessStartInfo()
@@ -134,6 +123,9 @@ namespace ApplicationSwitch.Lib.Rules
 
         #endregion
 
+        /// <summary>
+        /// Command / Script process start. for Enable
+        /// </summary>
         public override void EnableProcess()
         {
             if (!string.IsNullOrEmpty(this.EnableCommand))
@@ -166,6 +158,9 @@ namespace ApplicationSwitch.Lib.Rules
             EndProcess(isEnableProcess: true);
         }
 
+        /// <summary>
+        /// Command / Script process start. for Disable
+        /// </summary>
         public override void DisableProcess()
         {
             if (!string.IsNullOrEmpty(this.DisableCommand))
