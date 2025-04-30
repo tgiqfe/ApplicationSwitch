@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.VisualBasic.FileIO;
 
 namespace ApplicationSwitch.Lib.Rules
 {
@@ -14,7 +9,7 @@ namespace ApplicationSwitch.Lib.Rules
 
         private string EvacuateFilePath
         {
-            get { return Path.Combine(this.EvacuateParentPath, Path.GetFileName(this.TargetPath)); }
+            get { return Path.Combine(this.EvacuateRulePath, Path.GetFileName(this.TargetPath)); }
         }
 
         public override void Initialize()
@@ -24,24 +19,31 @@ namespace ApplicationSwitch.Lib.Rules
                 !string.IsNullOrEmpty(this.TargetPath);
         }
 
+        /// <summary>
+        /// file/directory restore to source path.
+        /// </summary>
         public override void EnableProcess()
         {
             string parent = Path.GetDirectoryName(this.TargetPath);
-            if (!Directory.Exists(parent))
-            {
-                Directory.CreateDirectory(parent);
-            }
 
             if (File.Exists(EvacuateFilePath) && !File.Exists(this.TargetPath))
             {
+                if (!Directory.Exists(parent))
+                {
+                    Directory.CreateDirectory(parent);
+                }
                 FileSystem.CopyFile(EvacuateFilePath, this.TargetPath, true);
             }
             else if (Directory.Exists(EvacuateFilePath) && !Directory.Exists(this.TargetPath))
             {
+                if (!Directory.Exists(parent))
+                {
+                    Directory.CreateDirectory(parent);
+                }
                 FileSystem.CopyDirectory(EvacuateFilePath, this.TargetPath, true);
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: true);
         }
 
         /// <summary>
@@ -49,41 +51,35 @@ namespace ApplicationSwitch.Lib.Rules
         /// </summary>
         public override void DisableProcess()
         {
-            if (!Directory.Exists(this.EvacuateParentPath))
+            if (!Directory.Exists(this.EvacuateRulePath))
             {
-                Directory.CreateDirectory(this.EvacuateParentPath);
+                Directory.CreateDirectory(this.EvacuateRulePath);
             }
 
             if (File.Exists(this.TargetPath))
             {
                 FileSystem.MoveFile(this.TargetPath, EvacuateFilePath, true);
 
-                //  remove empty parent.
-                if (this.RemoveEmptyParent)
-                {
-                    string targetParent = Path.GetDirectoryName(this.TargetPath);
-                    if (Directory.GetFiles(targetParent).Length == 0)
-                    {
-                        //Directory.Delete(targetParent, true);
-                    }
-                }
+                if (this.RemoveEmptyParent) __RemoveEmptyParentDirectory(this.TargetPath);
+
             }
             else if (Directory.Exists(this.TargetPath))
             {
                 FileSystem.MoveDirectory(this.TargetPath, EvacuateFilePath, true);
 
-                //  remove empty parent.
-                if (this.RemoveEmptyParent)
-                {
-                    string targetParent = Path.GetDirectoryName(this.TargetPath);
-                    if (Directory.GetFiles(targetParent).Length == 0)
-                    {
-                        //Directory.Delete(targetParent, true);
-                    }
-                }
+                if (this.RemoveEmptyParent) __RemoveEmptyParentDirectory(this.TargetPath);
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: false);
+
+            void __RemoveEmptyParentDirectory(string targetPath)
+            {
+                string parent = Path.GetDirectoryName(targetPath);
+                if (Directory.GetFiles(parent).Length == 0 && Directory.GetDirectories(parent).Length == 0)
+                {
+                    Directory.Delete(parent);
+                }
+            }
         }
     }
 }

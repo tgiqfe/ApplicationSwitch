@@ -10,9 +10,9 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Parent { get; set; }
 
-        public string EvacuateParentPath
+        public string EvacuateRulePath
         {
-            get { return Path.Combine(Item.EvacuateDirectory, this.Parent, this.Name); }
+            get { return Path.Combine(Item.EvacuateDirectory, $"{this.Parent}#{this.Name}"); }
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace ApplicationSwitch.Lib.Rules
         /// <summary>
         /// end process. for Enable or Disable process
         /// </summary>
-        protected void EndProcess()
+        protected void EndProcess(bool isEnableProcess)
         {
-            if (Item.HiddenEvacuateDirectory)
+            if (!isEnableProcess && Item.HiddenEvacuateDirectory)
             {
                 var attr = File.GetAttributes(Item.EvacuateDirectory);
                 if ((attr & FileAttributes.Hidden) != FileAttributes.Hidden)

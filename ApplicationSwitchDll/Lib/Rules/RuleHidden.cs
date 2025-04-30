@@ -47,7 +47,7 @@ namespace ApplicationSwitch.Lib.Rules
                 File.SetAttributes(this.TargetPath, File.GetAttributes(this.TargetPath) & (~FileAttributes.Hidden));
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: true);
         }
 
         public override void DisableProcess()
@@ -61,7 +61,7 @@ namespace ApplicationSwitch.Lib.Rules
                 File.SetAttributes(this.TargetPath, File.GetAttributes(this.TargetPath) | FileAttributes.Hidden);
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: false);
         }
     }
 }

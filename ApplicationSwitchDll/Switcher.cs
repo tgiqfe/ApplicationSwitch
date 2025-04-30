@@ -13,6 +13,7 @@ namespace ApplicationSwitch
             {
                 1 => Rule_File01.Create(),
                 2 => Rule_File02.Create(),
+                3 => Rule_Registry01.Create(),
                 _ => "",
             };
 

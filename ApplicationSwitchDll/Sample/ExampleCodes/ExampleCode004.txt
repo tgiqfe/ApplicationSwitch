@@ -15,9 +15,9 @@ $app = $apps[0]
 $endis = $app.CheckEnableOrDisable()
 
 $app.ConvertToRule() | Foreach {
-  if ($endis) {
+  if ($endis -eq $true) {
     if($_.Enabled) { $_.EnableProcess() }
-  } else {
+  } elseif($endis -eq $false) {
     if($_.Enabled) { $_.DisableProcess() }
   }
 }

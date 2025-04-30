@@ -163,7 +163,7 @@ namespace ApplicationSwitch.Lib.Rules
                 }
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: true);
         }
 
         public override void DisableProcess()
@@ -195,7 +195,7 @@ namespace ApplicationSwitch.Lib.Rules
                 }
             }
 
-            EndProcess();
+            EndProcess(isEnableProcess: false);
         }
     }
 }

@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Sample\TestCodes\" />
+    <Folder Include="Sample\ExampleCodes\" />
   </ItemGroup>
 
 </Project>
