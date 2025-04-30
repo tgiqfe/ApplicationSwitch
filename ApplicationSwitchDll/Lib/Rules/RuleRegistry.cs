@@ -99,13 +99,13 @@ namespace ApplicationSwitch.Lib.Rules
                 RegistryValueKind.String => text,
                 RegistryValueKind.DWord => int.Parse(text),
                 RegistryValueKind.QWord => long.Parse(text),
-                RegistryValueKind.Binary => StringToRegBinary(text),
+                RegistryValueKind.Binary => __StringToRegBinary(text),
                 RegistryValueKind.MultiString => text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries),
                 RegistryValueKind.ExpandString => text,
                 _ => null,
             };
 
-            byte[] StringToRegBinary(string val)
+            byte[] __StringToRegBinary(string val)
             {
                 if (Regex.IsMatch(val, @"^[0-9a-fA-F]+$"))
                 {

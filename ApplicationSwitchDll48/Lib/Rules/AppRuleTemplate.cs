@@ -58,7 +58,7 @@ namespace ApplicationSwitch.Lib.Rules
             }
             else if (candidate_Registry.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
             {
-                new RuleRegistry()
+                rule = new RuleRegistry()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
@@ -68,19 +68,19 @@ namespace ApplicationSwitch.Lib.Rules
             }
             else if (candidate_Command.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
             {
-                new RuleCommand()
+                rule = new RuleCommand()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
                     EnableCommand = this.EnableCommand,
                     DisableCommand = this.DisableCommand,
-                    EnableScript = this.EnableScript,
-                    DisableScript = this.DisableScript,
+                    EnableScript = Functions.ExpandEnvironmentText(this.EnableScript),
+                    DisableScript = Functions.ExpandEnvironmentText(this.DisableScript),
                 };
             }
             else if (candidate_Hidden.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
             {
-                new RuleHidden()
+                rule = new RuleHidden()
                 {
                     Parent = parentNamae,
                     Name = this.Name,

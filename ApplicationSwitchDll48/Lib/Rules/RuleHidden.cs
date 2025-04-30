@@ -8,7 +8,9 @@ namespace ApplicationSwitch.Lib.Rules
 
         public override void Initialize()
         {
-            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.TargetPath);
+            this.Enabled =
+                !string.IsNullOrEmpty(this.Name) &&
+                !string.IsNullOrEmpty(this.TargetPath);
         }
 
         public override void EnableProcess()

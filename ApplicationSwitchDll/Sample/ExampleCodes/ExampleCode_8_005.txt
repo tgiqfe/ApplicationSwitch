@@ -1,0 +1,22 @@
+# Parameter
+$evacuateDir = "${env:USERPROFILE}\Downloads\Work\Evacuate"
+$rulesDir = "${env:USERPROFILE}\Downloads\Work\Rules"
+
+# Main
+$asw = [ApplicationSwitch.Switcher]::GetInstance()
+$asw.EvacuateDirectory = $evacuateDir
+$asw.HiddenEvacuateDirectory = $true
+
+Get-ChildItem($rulesDir) | `
+  ? { $_.Extension -eq ".yml" -or $_.Extension -eq ".yaml" } | `
+  % { $asw.LoadRuleFile($_.FullName) } | `
+  % {
+    $endis = $_.CheckEnableOrDisable()
+    if ($endis -eq $true) {
+      $_.ConvertToRule() | ? { $_.Enabled } | % { $_.EnableProcess() }
+    } elseif ($endis -ne $null -and $endis -eq $false) {
+      $_.ConvertToRule() | ? { $_.Enabled } | % { $_.DisableProcess() }
+    }
+  }
+
+

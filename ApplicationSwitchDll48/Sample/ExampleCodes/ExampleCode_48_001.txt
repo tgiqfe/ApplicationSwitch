@@ -1,13 +1,16 @@
+# Init
+Import-Module "${env:USERPROFILE}\Desktop\AppSwitch\ApplicationSwitch.dll"
+
 # Parameter
-$evacuateDir = "${env:USERPROFILE}\Downloads\Work\Evacuate"
-$rulesDir = "${env:USERPROFILE}\Downloads\Work\Rules"
+$evacuateDir = "${env:USERPROFILE}\Desktop\Evacuate"
+$rulesDir = "${env:USERPROFILE}\Desktop\Rules"
 
 # Main
 $asw = [ApplicationSwitch.Switcher]::GetInstance()
 $asw.EvacuateDirectory = $evacuateDir
 $asw.HiddenEvacuateDirectory = $true
 
-$apps = Get-ChildItem($rulesDir) | `
+Get-ChildItem($rulesDir) | `
   ? { $_.Extension -eq ".yml" -or $_.Extension -eq ".yaml" } | `
   % { $asw.LoadRuleFile($_.FullName) } | `
   % {
@@ -18,5 +21,3 @@ $apps = Get-ChildItem($rulesDir) | `
       $_.ConvertToRule() | ? { $_.Enabled } | % { $_.DisableProcess() }
     }
   }
-
-

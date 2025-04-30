@@ -67,8 +67,8 @@ namespace ApplicationSwitch.Lib.Rules
                     Name = this.Name,
                     EnableCommand = this.EnableCommand,
                     DisableCommand = this.DisableCommand,
-                    EnableScript = this.EnableScript,
-                    DisableScript = this.DisableScript,
+                    EnableScript = Functions.ExpandEnvironmentText(this.EnableScript),
+                    DisableScript = Functions.ExpandEnvironmentText(this.DisableScript),
                 },
                 string s when candidate_Hidden.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleHidden()
                 {

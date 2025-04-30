@@ -1,11 +1,11 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ApplicationSwitch.Lib.Rules
@@ -245,7 +245,9 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 if (File.Exists(this.EvacuateFilePath) && !RegistryExists(this.RegistryKey, this.RegistryParam))
                 {
-                    var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
+                    //var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
+                    var backup = JsonConvert.DeserializeObject<RegistryParamBackup>(
+                        File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
                     using (var regKey = GetRegistryKey(this.RegistryKey, true, true))
                     {
                         regKey.SetValue(
@@ -300,6 +302,7 @@ namespace ApplicationSwitch.Lib.Rules
                     }
 
                     var valueKind = regKey.GetValueKind(this.RegistryParam);
+                    /*
                     var content = JsonSerializer.Serialize(
                         new RegistryParamBackup()
                         {
@@ -308,6 +311,16 @@ namespace ApplicationSwitch.Lib.Rules
                             Type = RegistryValueKindToString(valueKind),
                             Value = RegistryValueToString(regKey, this.RegistryParam, valueKind, false)
                         }, new JsonSerializerOptions() { WriteIndented = true });
+                    */
+
+                    var content = JsonConvert.SerializeObject(
+                        new RegistryParamBackup()
+                        {
+                            Key = this.RegistryKey,
+                            Name = this.RegistryParam,
+                            Type = RegistryValueKindToString(valueKind),
+                            Value = RegistryValueToString(regKey, this.RegistryParam, valueKind, false)
+                        }, Formatting.Indented);
                     File.WriteAllText(this.EvacuateFilePath, content, Encoding.UTF8);
 
                     regKey.DeleteValue(this.RegistryParam);

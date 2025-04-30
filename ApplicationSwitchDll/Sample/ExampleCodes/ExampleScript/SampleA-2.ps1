@@ -1,2 +1,2 @@
 
-"PowerShell AAAAAAAAAAAAAAA" | Out-File -FilePath "C:\Users\User\Desktop\test.txt" -Append -Encoding UTF8
+"PowerShell AAAAAAAAAAAAAAA" | Out-File -FilePath "${env:USERPROFILE}\Desktop\test.txt" -Append -Encoding UTF8

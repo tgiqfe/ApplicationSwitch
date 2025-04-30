@@ -105,6 +105,8 @@ namespace ApplicationSwitch.Lib
 
         public static string ExpandEnvironmentText(string text)
         {
+            if (string.IsNullOrEmpty(text)) return text;
+
             string retText = text;
             if (text.Contains("%"))
             {
