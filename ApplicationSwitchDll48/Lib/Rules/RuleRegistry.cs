@@ -1,7 +1,11 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace ApplicationSwitch.Lib.Rules
@@ -50,15 +54,28 @@ namespace ApplicationSwitch.Lib.Rules
             string rootName = path.Substring(0, path.IndexOf("\\"));
             string keyName = path.Substring(path.IndexOf("\\") + 1);
 
-            var root = rootName switch
+            RegistryKey root = null;
+            if (candidate_HKCR.Any(x => x.Equals(rootName, StringComparison.OrdinalIgnoreCase)))
             {
-                string s when candidate_HKCR.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => Registry.ClassesRoot,
-                string s when candidate_HKCU.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => Registry.CurrentUser,
-                string s when candidate_HKLM.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => Registry.LocalMachine,
-                string s when candidate_HKU.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => Registry.Users,
-                string s when candidate_HKCC.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => Registry.CurrentConfig,
-                _ => null,
-            };
+                root = Registry.ClassesRoot;
+            }
+            else if (candidate_HKCU.Any(x => x.Equals(rootName, StringComparison.OrdinalIgnoreCase)))
+            {
+                root = Registry.CurrentUser;
+            }
+            else if (candidate_HKLM.Any(x => x.Equals(rootName, StringComparison.OrdinalIgnoreCase)))
+            {
+                root = Registry.LocalMachine;
+            }
+            else if (candidate_HKU.Any(x => x.Equals(rootName, StringComparison.OrdinalIgnoreCase)))
+            {
+                root = Registry.Users;
+            }
+            else if (candidate_HKCC.Any(x => x.Equals(rootName, StringComparison.OrdinalIgnoreCase)))
+            {
+                root = Registry.CurrentConfig;
+            }
+
             return isCreate ?
                 root.CreateSubKey(keyName, writable) :
                 root.OpenSubKey(keyName, writable);
@@ -66,44 +83,76 @@ namespace ApplicationSwitch.Lib.Rules
 
         private static RegistryValueKind StringToValueKind(string text)
         {
-            return text switch
+            if (candidate_string.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
             {
-                string s when candidate_string.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.String,
-                string s when candidate_dword.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.DWord,
-                string s when candidate_qword.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.QWord,
-                string s when candidate_binary.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.Binary,
-                string s when candidate_multi.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.MultiString,
-                string s when candidate_expand.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => RegistryValueKind.ExpandString,
-                _ => RegistryValueKind.Unknown,
-            };
+                return RegistryValueKind.String;
+            }
+            else if (candidate_dword.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+            {
+                return RegistryValueKind.DWord;
+            }
+            else if (candidate_qword.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+            {
+                return RegistryValueKind.QWord;
+            }
+            else if (candidate_binary.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+            {
+                return RegistryValueKind.Binary;
+            }
+            else if (candidate_multi.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+            {
+                return RegistryValueKind.MultiString;
+            }
+            else if (candidate_expand.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+            {
+                return RegistryValueKind.ExpandString;
+            }
+            else
+            {
+                return RegistryValueKind.Unknown;
+            }
         }
 
         private static string RegistryValueKindToString(RegistryValueKind valueKind)
         {
-            return valueKind switch
+            switch (valueKind)
             {
-                RegistryValueKind.String => "REG_SZ",
-                RegistryValueKind.DWord => "REG_DWORD",
-                RegistryValueKind.QWord => "REG_QWORD",
-                RegistryValueKind.Binary => "REG_BINARY",
-                RegistryValueKind.MultiString => "REG_MULTI_SZ",
-                RegistryValueKind.ExpandString => "REG_EXPAND_SZ",
-                _ => "Unknown",
-            };
+                case RegistryValueKind.String:
+                    return "REG_SZ";
+                case RegistryValueKind.DWord:
+                    return "REG_DWORD";
+                case RegistryValueKind.QWord:
+                    return "REG_QWORD";
+                case RegistryValueKind.Binary:
+                    return "REG_BINARY";
+                case RegistryValueKind.MultiString:
+                    return "REG_MULTI_SZ";
+                case RegistryValueKind.ExpandString:
+                    return "REG_EXPAND_SZ";
+                default:
+                    return "Unknown";
+            }
         }
 
         private static object StringToRegistryValue(string text, RegistryValueKind type)
         {
-            return type switch
+            switch (type)
             {
-                RegistryValueKind.String => text,
-                RegistryValueKind.DWord => int.Parse(text),
-                RegistryValueKind.QWord => long.Parse(text),
-                RegistryValueKind.Binary => __StringToRegBinary(text),
-                RegistryValueKind.MultiString => text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries),
-                RegistryValueKind.ExpandString => text,
-                _ => null,
-            };
+                case RegistryValueKind.String:
+                    return text;
+                case RegistryValueKind.DWord:
+                    return int.Parse(text);
+                case RegistryValueKind.QWord:
+                    return long.Parse(text);
+                case RegistryValueKind.Binary:
+                    return __StringToRegBinary(text);
+                case RegistryValueKind.MultiString:
+                    return text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                case RegistryValueKind.ExpandString:
+                    return text;
+                default:
+                    return null;
+            }
 
             byte[] __StringToRegBinary(string val)
             {
@@ -122,18 +171,25 @@ namespace ApplicationSwitch.Lib.Rules
 
         private static string RegistryValueToString(RegistryKey regKey, string name, RegistryValueKind valueKind, bool noResolv)
         {
-            return valueKind switch
+            switch (valueKind)
             {
-                RegistryValueKind.String => regKey.GetValue(name) as string,
-                RegistryValueKind.DWord => regKey.GetValue(name) as string,
-                RegistryValueKind.QWord => regKey.GetValue(name) as string,
-                RegistryValueKind.Binary => BitConverter.ToString(regKey.GetValue(name) as byte[]).Replace("-", "").ToString(),
-                RegistryValueKind.MultiString => string.Join("\r\n", regKey.GetValue(name) as string[]),
-                RegistryValueKind.ExpandString => noResolv ?
-                regKey.GetValue(name, "", RegistryValueOptions.DoNotExpandEnvironmentNames) as string :
-                    regKey.GetValue(name) as string,
-                _ => null,
-            };
+                case RegistryValueKind.String:
+                    return regKey.GetValue(name) as string;
+                case RegistryValueKind.DWord:
+                    return regKey.GetValue(name) as string;
+                case RegistryValueKind.QWord:
+                    return regKey.GetValue(name) as string;
+                case RegistryValueKind.Binary:
+                    return BitConverter.ToString(regKey.GetValue(name) as byte[]).Replace("-", "").ToString();
+                case RegistryValueKind.MultiString:
+                    return string.Join("\r\n", regKey.GetValue(name) as string[]);
+                case RegistryValueKind.ExpandString:
+                    return noResolv ?
+                        regKey.GetValue(name, "", RegistryValueOptions.DoNotExpandEnvironmentNames) as string :
+                        regKey.GetValue(name) as string;
+                default:
+                    return null;
+            }
         }
 
         private static bool RegistryExists(RegistryKey regKey, string name = null)
@@ -189,7 +245,9 @@ namespace ApplicationSwitch.Lib.Rules
             {
                 if (File.Exists(this.EvacuateFilePath) && !RegistryExists(this.RegistryKey, this.RegistryParam))
                 {
-                    var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
+                    //var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
+                    var backup = JsonConvert.DeserializeObject<RegistryParamBackup>(
+                        File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
                     using (var regKey = GetRegistryKey(this.RegistryKey, true, true))
                     {
                         regKey.SetValue(
@@ -244,6 +302,7 @@ namespace ApplicationSwitch.Lib.Rules
                     }
 
                     var valueKind = regKey.GetValueKind(this.RegistryParam);
+                    /*
                     var content = JsonSerializer.Serialize(
                         new RegistryParamBackup()
                         {
@@ -252,6 +311,16 @@ namespace ApplicationSwitch.Lib.Rules
                             Type = RegistryValueKindToString(valueKind),
                             Value = RegistryValueToString(regKey, this.RegistryParam, valueKind, false)
                         }, new JsonSerializerOptions() { WriteIndented = true });
+                    */
+
+                    var content = JsonConvert.SerializeObject(
+                        new RegistryParamBackup()
+                        {
+                            Key = this.RegistryKey,
+                            Name = this.RegistryParam,
+                            Type = RegistryValueKindToString(valueKind),
+                            Value = RegistryValueToString(regKey, this.RegistryParam, valueKind, false)
+                        }, Formatting.Indented);
                     File.WriteAllText(this.EvacuateFilePath, content, Encoding.UTF8);
 
                     regKey.DeleteValue(this.RegistryParam);

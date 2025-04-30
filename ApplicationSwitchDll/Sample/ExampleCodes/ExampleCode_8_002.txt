@@ -1,0 +1,51 @@
+# Parameter
+$evacuateDir = "${env:USERPROFILE}\Downloads\Work\Evacuate"
+$rulesDir = "${env:USERPROFILE}\Downloads\Work\Rules"
+
+# Main
+$asw = [ApplicationSwitch.Switcher]::GetInstance()
+$asw.EvacuateDirectory = $evacuateDir
+$asw.HiddenEvacuateDirectory = $true
+
+$apps = Get-ChildItem($rulesDir) | `
+  Where { $_.Extension -eq ".yml" -or $_.Extension -eq ".yaml" } | `
+  Foreach { $asw.LoadRuleFile($_.FullName) }
+
+foreach ($app in $apps) {
+  if (!($app.CheckMetadataParameter())) {
+    Write-Host "Metadata parameter is incorrect."
+    continue
+  }
+  if (!($app.CheckTargetParameter())) {
+    Write-Host "Target parameter is incorrect."
+    continue
+  }
+  if (!($app.CheckRuleParameter())) {
+    Write-Host "Rule parameter is incorrect."
+    continue
+  }
+  Write-Host ("Application Switch: " + $app.Config.Metadata.Name)
+  $endis = $app.CheckEnableOrDisable()
+  if ($endis -eq $true) {
+    $app.ConvertToRule() | Foreach { 
+      if ($_.Enabled) {
+        Write-Host "Start enable process."
+        $_.EnableProcess()
+      } else {
+        Write-Host "Skip rule process."
+      }
+    }
+  }
+  elseif ($endis -eq $false) {
+    $app.ConvertToRule() | Foreach {
+      if($_.Enabled){
+        if ($_.Enabled) {
+          Write-Host "Start disable process."
+          $_.DisableProcess()
+        } else {
+          Write-Host "Skip rule process."
+        }
+      }
+    }
+  }
+}

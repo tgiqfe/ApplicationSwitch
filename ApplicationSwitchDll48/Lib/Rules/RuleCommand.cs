@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,49 +77,55 @@ namespace ApplicationSwitch.Lib.Rules
         {
             string scriptPath = scriptPathText.Trim().Trim('\"').Trim('\'');
             string extension = Path.GetExtension(scriptPath).ToLower();
-            return extension switch
+            switch (extension)
             {
-                ".bat" or ".cmd" => new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
+                case ".bat":
+                case ".cmd":
+                    return new Process()
                     {
-                        FileName = "cmd.exe",
-                        Arguments = $"/c \"{scriptPath}\"",
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                },
-                ".ps1" => new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            FileName = "cmd.exe",
+                            Arguments = $"/c \"{scriptPath}\"",
+                            UseShellExecute = false,
+                            CreateNoWindow = true
+                        }
+                    };
+                case ".ps1":
+                    return new Process()
                     {
-                        FileName = "powershell.exe",
-                        Arguments = $"-ExecutionPolicy Unrestricted -File \"{scriptPath}\"",
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                },
-                ".vbs" => new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            FileName = "powershell.exe",
+                            Arguments = $"-ExecutionPolicy Unrestricted -File \"{scriptPath}\"",
+                            UseShellExecute = false,
+                            CreateNoWindow = true
+                        }
+                    };
+                case ".vbs":
+                    return new Process()
                     {
-                        FileName = "wscript.exe",
-                        Arguments = $"\"{scriptPath}\"",
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                },
-                ".exe" => new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            FileName = "wscript.exe",
+                            Arguments = $"\"{scriptPath}\"",
+                            UseShellExecute = false,
+                            CreateNoWindow = true
+                        }
+                    };
+                case ".exe":
+                    return new Process()
                     {
-                        FileName = scriptPath,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    }
-                },
-                _ => null,
-            };
+                        StartInfo = new ProcessStartInfo()
+                        {
+                            FileName = scriptPath,
+                            UseShellExecute = false,
+                            CreateNoWindow = true
+                        }
+                    };
+                default:
+                    return null;
+            }
         }
 
         #endregion

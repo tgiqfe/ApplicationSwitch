@@ -1,4 +1,6 @@
-﻿namespace ApplicationSwitch.Lib.Rules
+﻿using System.IO;
+
+namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleHidden : RuleBase
     {
@@ -6,7 +8,9 @@
 
         public override void Initialize()
         {
-            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.TargetPath);
+            this.Enabled =
+                !string.IsNullOrEmpty(this.Name) &&
+                !string.IsNullOrEmpty(this.TargetPath);
         }
 
         public override void EnableProcess()

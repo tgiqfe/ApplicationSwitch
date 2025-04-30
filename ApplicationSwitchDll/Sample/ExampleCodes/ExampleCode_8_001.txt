@@ -1,0 +1,25 @@
+$asw = [ApplicationSwitch.Switcher]::GetInstance()
+$asw.EvacuateDirectory = "${env:USERPROFILE}\Downloads\Work"
+$asw.HiddenEvacuateDirectory = $true
+
+$ap = $asw.LoadRuleFile("${env:USERPROFILE}\Downloads\configs\test01.yml")
+
+$ret = $ap.CheckMetadataParameter()
+if(!($ret)){ exit }
+
+$ret = $ap.CheckTargetParameter()
+if(!($ret)){ exit }
+
+$ret = $ap.CheckRuleParameter()
+if(!($ret)){ exit }
+
+$endis = $ap.CheckEnableOrDisable()
+if($endis != $null){
+  $ap.ConvertToRule() | % {
+    if($endis){
+      $rule.EnableProcess()
+    } elseif (!($endis)){
+      $rule.DisableProcess()
+    }
+  }
+}

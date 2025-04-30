@@ -1,7 +1,13 @@
 ﻿using ApplicationSwitch.Lib;
-using ApplicationSwitch.Lib.Rules;
 using ApplicationSwitch.Sample.SampleRule;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using ApplicationSwitch.Lib.Rules;
 
 namespace ApplicationSwitch
 {
@@ -9,18 +15,16 @@ namespace ApplicationSwitch
     {
         public static void CreateSample(int num)
         {
-            string text = num switch
+            switch (num)
             {
-                1 => Rule_File01.Create(),
-                2 => Rule_File02.Create(),
-                3 => Rule_File03.Create(),
-                4 => Rule_Registry01.Create(),
-                5 => Rule_Command01.Create(),
-                6 => Rule_Hidden01.Create(),
-                _ => "",
-            };
-
-            Console.WriteLine(text);
+                case 1: Console.WriteLine(Rule_File01.Create()); break;
+                case 2: Console.WriteLine(Rule_File02.Create()); break;
+                case 3: Console.WriteLine(Rule_File03.Create()); break;
+                case 4: Console.WriteLine(Rule_Registry01.Create()); break;
+                case 5: Console.WriteLine(Rule_Command01.Create()); break;
+                case 6: Console.WriteLine(Rule_Hidden01.Create()); break;
+                default: Console.WriteLine(""); break;
+            }
         }
 
         public static string Version
