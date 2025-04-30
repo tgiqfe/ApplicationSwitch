@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationSwitch", "Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationSwitchDll", "ApplicationSwitchDll\ApplicationSwitchDll.csproj", "{272E72F3-CDC7-4308-8783-4696ACA09129}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationSwitchDll48", "ApplicationSwitchDll48\ApplicationSwitchDll48.csproj", "{AEB6CEA0-0A07-4A73-8A74-D4ED0CD52B03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{272E72F3-CDC7-4308-8783-4696ACA09129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{272E72F3-CDC7-4308-8783-4696ACA09129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{272E72F3-CDC7-4308-8783-4696ACA09129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB6CEA0-0A07-4A73-8A74-D4ED0CD52B03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB6CEA0-0A07-4A73-8A74-D4ED0CD52B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB6CEA0-0A07-4A73-8A74-D4ED0CD52B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB6CEA0-0A07-4A73-8A74-D4ED0CD52B03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -45,23 +45,30 @@ namespace ApplicationSwitch.Lib.Rules
 
         public RuleBase ConvertToRule(string parentNamae)
         {
-            RuleBase rule = this.Action switch
+            RuleBase rule = null;
+            if (candidate_File.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
             {
-                string s when candidate_File.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleFile()
+                rule = new RuleFile()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
                     TargetPath = Functions.ExpandEnvironmentText(this.TargetPath),
                     RemoveEmptyParent = Functions.IsEnable(this.RemoveEmptyParent),
-                },
-                string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry()
+                };
+            }
+            else if (candidate_Registry.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
+            {
+                new RuleRegistry()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
                     RegistryKey = this.RegistryKey,
                     RegistryParam = this.RegistryParam,
-                },
-                string s when candidate_Command.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleCommand()
+                };
+            }
+            else if (candidate_Command.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
+            {
+                new RuleCommand()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
@@ -69,15 +76,18 @@ namespace ApplicationSwitch.Lib.Rules
                     DisableCommand = this.DisableCommand,
                     EnableScript = this.EnableScript,
                     DisableScript = this.DisableScript,
-                },
-                string s when candidate_Hidden.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleHidden()
+                };
+            }
+            else if (candidate_Hidden.Any(x => x.Equals(this.Action, StringComparison.OrdinalIgnoreCase)))
+            {
+                new RuleHidden()
                 {
                     Parent = parentNamae,
                     Name = this.Name,
                     TargetPath = Functions.ExpandEnvironmentText(this.TargetPath),
-                },
-                _ => null,
-            };
+                };
+            }
+
             rule.Initialize();
 
             return rule;
