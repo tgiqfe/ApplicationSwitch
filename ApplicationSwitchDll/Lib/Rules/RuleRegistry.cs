@@ -34,8 +34,8 @@ namespace ApplicationSwitch.Lib.Rules
             this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.RegistryKey);
             _isEvacuateRegKey = this.RegistryParam == null;
             _evacuateBackupFilePath = _isEvacuateRegKey ?
-                Path.Combine(this.AppEvacuatePath, _BACKUP_KEY_NAME) :
-                Path.Combine(this.AppEvacuatePath, _BACKUP_PARAM_NAME);
+                Path.Combine(this.EvacuateParentPath, _BACKUP_KEY_NAME) :
+                Path.Combine(this.EvacuateParentPath, _BACKUP_PARAM_NAME);
         }
 
 
@@ -48,8 +48,8 @@ namespace ApplicationSwitch.Lib.Rules
             this.RegistryKey = registryKey;
             this.RegistryParam = registryParam;
 
-            this.EvacuateKeyPath = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.RegistryKey));
-            this.EvacuateParamPath = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.RegistryParam));
+            this.EvacuateKeyPath = Path.Combine(this.EvacuateParentPath, Path.GetFileName(this.RegistryKey));
+            this.EvacuateParamPath = Path.Combine(this.EvacuateParentPath, Path.GetFileName(this.RegistryParam));
 
             //  Name parameter checking.
             if (string.IsNullOrEmpty(this.Name))

@@ -44,6 +44,7 @@ namespace ApplicationSwitch.Lib.Rules
         private readonly static string[] candidate_Command = new string[] { "Command", "cmd" };
         private readonly static string[] candidate_Hidden = new string[] { "Hidden", "Hide", "Hiden" };
 
+        /*
         public RuleBase ConvertToRule(string appEvacuate)
         {
             return this.Action switch
@@ -72,6 +73,7 @@ namespace ApplicationSwitch.Lib.Rules
                 _ => null,
             };
         }
+        */
 
         public RuleBase ConvertToRule2(string parentNamae)
         {
@@ -82,6 +84,7 @@ namespace ApplicationSwitch.Lib.Rules
                     Parent = parentNamae,
                     Name = this.Name,
                     TargetPath = this.TargetPath,
+                    RemoveEmptyParent = Functions.IsEnable(this.RemoveEmptyParent),
                 },
                 string s when candidate_Registry.Any(x => x.Equals(s, StringComparison.OrdinalIgnoreCase)) => new RuleRegistry()
                 {

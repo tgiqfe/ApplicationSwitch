@@ -1,9 +1,7 @@
-﻿using ApplicationSwitch;
-using ApplicationSwitch.Lib;
+﻿using ApplicationSwitch.Lib;
 using ApplicationSwitch.Lib.Rules;
 using ApplicationSwitch.Sample.SampleRule;
-using System.Security.Cryptography.X509Certificates;
-using YamlDotNet.Serialization;
+using System.Reflection;
 
 namespace ApplicationSwitch
 {
@@ -19,6 +17,14 @@ namespace ApplicationSwitch
             };
 
             Console.WriteLine(text);
+        }
+
+        public static string Version
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
         }
 
         public static Switcher GetInstance()

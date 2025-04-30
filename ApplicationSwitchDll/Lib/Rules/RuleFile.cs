@@ -12,53 +12,24 @@ namespace ApplicationSwitch.Lib.Rules
         public string TargetPath { get; set; }
         public bool RemoveEmptyParent { get; set; }
 
-
-        private string TargetParent { get; set; }
-        public string EvacuateFilePath { get; set; }
-
-
-
-
-        public RuleFile() { }
+        private string EvacuateFilePath
+        {
+            get { return Path.Combine(this.EvacuateParentPath, Path.GetFileName(this.TargetPath)); }
+        }
 
         public override void Initialize()
         {
-            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.TargetPath);
-        }
-
-
-
-
-
-        public RuleFile(string name, string appEvacuate, string targetPath, string removeEmptyParent)
-        {
-            this.Name = name;
-            this.TargetPath = targetPath;
-            this.RemoveEmptyParent = Functions.IsEnable(removeEmptyParent);
-
-            this.TargetParent = Path.GetDirectoryName(targetPath);
-            this.EvacuateFilePath = Path.Combine(this.AppEvacuatePath, Path.GetFileName(this.TargetPath));
-
-            //  Name parameter checking.
-            if (string.IsNullOrEmpty(this.Name))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.TargetPath))
-            {
-
-                return;
-            }
-
-            this.Enabled = true;
+            this.Enabled =
+                !string.IsNullOrEmpty(this.Name) &&
+                !string.IsNullOrEmpty(this.TargetPath);
         }
 
         public override void EnableProcess()
         {
-            if (!Directory.Exists(this.TargetParent))
+            string parent = Path.GetDirectoryName(this.TargetPath);
+            if (!Directory.Exists(parent))
             {
-                Directory.CreateDirectory(this.TargetParent);
+                Directory.CreateDirectory(parent);
             }
 
             if (File.Exists(EvacuateFilePath) && !File.Exists(this.TargetPath))
@@ -78,20 +49,23 @@ namespace ApplicationSwitch.Lib.Rules
         /// </summary>
         public override void DisableProcess()
         {
-            if (!Directory.Exists(this.AppEvacuatePath))
+            if (!Directory.Exists(this.EvacuateParentPath))
             {
-                Directory.CreateDirectory(this.AppEvacuatePath);
+                Directory.CreateDirectory(this.EvacuateParentPath);
             }
 
-            //  evacuate.
             if (File.Exists(this.TargetPath))
             {
                 FileSystem.MoveFile(this.TargetPath, EvacuateFilePath, true);
 
                 //  remove empty parent.
-                if (this.RemoveEmptyParent && Directory.GetFiles(this.TargetParent).Length > 0)
+                if (this.RemoveEmptyParent)
                 {
-                    Directory.Delete(this.TargetParent, true);
+                    string targetParent = Path.GetDirectoryName(this.TargetPath);
+                    if (Directory.GetFiles(targetParent).Length == 0)
+                    {
+                        //Directory.Delete(targetParent, true);
+                    }
                 }
             }
             else if (Directory.Exists(this.TargetPath))
@@ -99,9 +73,13 @@ namespace ApplicationSwitch.Lib.Rules
                 FileSystem.MoveDirectory(this.TargetPath, EvacuateFilePath, true);
 
                 //  remove empty parent.
-                if (this.RemoveEmptyParent && Directory.GetFiles(this.TargetParent).Length > 0)
+                if (this.RemoveEmptyParent)
                 {
-                    Directory.Delete(this.TargetParent, true);
+                    string targetParent = Path.GetDirectoryName(this.TargetPath);
+                    if (Directory.GetFiles(targetParent).Length == 0)
+                    {
+                        //Directory.Delete(targetParent, true);
+                    }
                 }
             }
 

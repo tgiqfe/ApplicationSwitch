@@ -10,7 +10,7 @@ namespace ApplicationSwitch.Lib.Rules
     {
         public string Parent { get; set; }
 
-        public string AppEvacuatePath
+        public string EvacuateParentPath
         {
             get { return Path.Combine(Item.EvacuateDirectory, this.Parent, this.Name); }
         }

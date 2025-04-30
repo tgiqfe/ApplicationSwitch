@@ -94,9 +94,11 @@ namespace ApplicationSwitch.Lib.Rules
         /// Convert setting => rule object.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<RuleBase> ConvertToRule()
+        public RuleBase[] ConvertToRule()
         {
-            return this.Config.Rule.Rules.Select(x => x.ConvertToRule2(this.Config.Metadata.Name));
+            return this.Config.Rule.Rules.
+                Select(x => x.ConvertToRule2(this.Config.Metadata.Name)).
+                ToArray();
         }
     }
 }
