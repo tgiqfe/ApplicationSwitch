@@ -80,11 +80,5 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Sample\ExampleCodes\Example_CreateSample_8_01.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Sample\ExampleCodes\ExampleCode_48_001.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
