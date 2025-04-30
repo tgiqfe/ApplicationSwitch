@@ -1,68 +1,33 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using YamlDotNet.Core.Tokens;
 
 namespace ApplicationSwitch.Lib.Rules
 {
     internal class RuleRegistry : RuleBase
     {
-        const string _BACKUP_KEY_NAME = "registry_backup.reg";
-        const string _BACKUP_PARAM_NAME = "registry_backup.json";
-
         public string RegistryKey { get; set; }
         public string RegistryParam { get; set; }
 
-        private bool _isEvacuateRegKey = false;
-        private string _evacuateBackupFilePath = null;
-
-
-        private string EvacuateKeyPath { get; set; }
-        private string EvacuateParamPath { get; set; }
-
-        public RuleRegistry() { }
+        const string _BACKUP_KEY_NAME = "registry_backup.reg";
+        const string _BACKUP_PARAM_NAME = "registry_backup.json";
+        private string EvacuateFilePath
+        {
+            get
+            {
+                return Path.Combine(
+                    this.EvacuateRulePath,
+                    this.RegistryParam == null ? _BACKUP_KEY_NAME : _BACKUP_PARAM_NAME);
+            }
+        }
 
         public override void Initialize()
         {
-            this.Enabled = !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.RegistryKey);
-            _isEvacuateRegKey = this.RegistryParam == null;
-            _evacuateBackupFilePath = _isEvacuateRegKey ?
-                Path.Combine(this.EvacuateRulePath, _BACKUP_KEY_NAME) :
-                Path.Combine(this.EvacuateRulePath, _BACKUP_PARAM_NAME);
-        }
-
-
-
-
-
-        public RuleRegistry(string name, string appEvacuate, string registryKey, string registryParam)
-        {
-            this.Name = name;
-            this.RegistryKey = registryKey;
-            this.RegistryParam = registryParam;
-
-            this.EvacuateKeyPath = Path.Combine(this.EvacuateRulePath, Path.GetFileName(this.RegistryKey));
-            this.EvacuateParamPath = Path.Combine(this.EvacuateRulePath, Path.GetFileName(this.RegistryParam));
-
-            //  Name parameter checking.
-            if (string.IsNullOrEmpty(this.Name))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.RegistryKey))
-            {
-                return;
-            }
-
-            this.Enabled = true;
+            this.Enabled =
+                !string.IsNullOrEmpty(this.Name) &&
+                !string.IsNullOrEmpty(this.RegistryKey);
         }
 
         #region Registry control methods.
@@ -200,16 +165,19 @@ namespace ApplicationSwitch.Lib.Rules
 
         #endregion
 
+        /// <summary>
+        /// Registry key/param restore to source.
+        /// </summary>
         public override void EnableProcess()
         {
             if (this.RegistryParam == null)
             {
-                if (File.Exists(this.EvacuateKeyPath) && !RegistryExists(this.RegistryKey))
+                if (File.Exists(this.EvacuateFilePath) && !RegistryExists(this.RegistryKey))
                 {
                     using (var proc = new Process())
                     {
                         proc.StartInfo.FileName = "cmd";
-                        proc.StartInfo.Arguments = $"/c reg import \"{this.EvacuateKeyPath}\"";
+                        proc.StartInfo.Arguments = $"/c reg import \"{this.EvacuateFilePath}\"";
                         proc.StartInfo.UseShellExecute = false;
                         proc.StartInfo.CreateNoWindow = true;
                         proc.Start();
@@ -219,12 +187,9 @@ namespace ApplicationSwitch.Lib.Rules
             }
             else
             {
-                //  evacuate registry param.
-                string nameForLog = string.IsNullOrEmpty(this.RegistryParam) ? "(Default)" : this.RegistryParam;
-
-                if (File.Exists(this.EvacuateParamPath) && !RegistryExists(this.RegistryKey, this.RegistryParam))
+                if (File.Exists(this.EvacuateFilePath) && !RegistryExists(this.RegistryKey, this.RegistryParam))
                 {
-                    var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateParamPath, Encoding.UTF8));
+                    var backup = JsonSerializer.Deserialize<RegistryParamBackup>(File.ReadAllText(this.EvacuateFilePath, Encoding.UTF8));
                     using (var regKey = GetRegistryKey(this.RegistryKey, true, true))
                     {
                         regKey.SetValue(
@@ -238,22 +203,22 @@ namespace ApplicationSwitch.Lib.Rules
             EndProcess(isEnableProcess: true);
         }
 
+        /// <summary>
+        /// Registry key/param move to evacuate path.
+        /// </summary>
         public override void DisableProcess()
         {
             if (this.RegistryParam == null)
             {
                 //  evacuate registry key.
-                using (var regKey = GetRegistryKey(this.RegistryKey))
+                if (!RegistryExists(this.RegistryKey))
                 {
-                    if (!RegistryExists(regKey))
-                    {
-                        return;
-                    }
+                    return;
                 }
                 using (var proc = new Process())
                 {
                     proc.StartInfo.FileName = "cmd";
-                    proc.StartInfo.Arguments = $"/c reg export \"{this.RegistryKey}\" \"{this.EvacuateKeyPath}\" /y";
+                    proc.StartInfo.Arguments = $"/c reg export \"{this.RegistryKey}\" \"{this.EvacuateFilePath}\" /y";
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.CreateNoWindow = true;
                     proc.Start();
@@ -266,10 +231,7 @@ namespace ApplicationSwitch.Lib.Rules
             }
             else
             {
-                //  evacuate registry param.
-                string nameForLog = string.IsNullOrEmpty(this.RegistryParam) ? "(Default)" : this.RegistryParam;
-
-                using (var regKey = GetRegistryKey(this.RegistryKey))
+                using (var regKey = GetRegistryKey(this.RegistryKey, false, true))
                 {
                     if (!RegistryExists(regKey, this.RegistryParam))
                     {
@@ -285,16 +247,11 @@ namespace ApplicationSwitch.Lib.Rules
                             Type = RegistryValueKindToString(valueKind),
                             Value = RegistryValueToString(regKey, this.RegistryParam, valueKind, false)
                         }, new JsonSerializerOptions() { WriteIndented = true });
-                    File.WriteAllText(this.EvacuateParamPath, content, Encoding.UTF8);
-                }
-                using (var regKey = GetRegistryKey(this.RegistryKey, false, true))
-                {
+                    File.WriteAllText(this.EvacuateFilePath, content, Encoding.UTF8);
+
                     regKey.DeleteValue(this.RegistryParam);
                 }
             }
-
-
-
 
             EndProcess(isEnableProcess: false);
         }
