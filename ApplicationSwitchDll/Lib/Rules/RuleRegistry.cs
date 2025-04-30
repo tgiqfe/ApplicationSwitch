@@ -208,6 +208,11 @@ namespace ApplicationSwitch.Lib.Rules
         /// </summary>
         public override void DisableProcess()
         {
+            if (!Directory.Exists(this.EvacuateRulePath))
+            {
+                Directory.CreateDirectory(this.EvacuateRulePath);
+            }
+
             if (this.RegistryParam == null)
             {
                 //  evacuate registry key.

@@ -19,6 +19,9 @@ namespace ApplicationSwitch.Lib.Rules
         [YamlMember(Alias = "Disable")]
         public string DisableTargets { get; set; }
 
+        /// <summary>
+        /// Primary target. valid parameter is "Enable" or "Disable".
+        /// </summary>
         public string PrimaryTarget { get; set; }
 
         #endregion
