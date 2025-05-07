@@ -9,7 +9,7 @@ namespace ApplicationSwitch.Lib
     {
         public static string EvacuateDirectory = Path.Combine(Environment.CurrentDirectory, "Evacuate");
         public static bool HiddenEvacuateDirectory = true;
-
+        
         #region Hostname parts
 
         public static readonly string Hostname = Environment.MachineName;

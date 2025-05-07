@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationSwitch.Lib.Yml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,6 +98,7 @@ namespace ApplicationSwitch.Lib.Rules
         public RuleBase[] ConvertToRule()
         {
             return this.Config.Rule.Rules.
+                OrderBy(x => x.Name, new NaturalComparer()).
                 Select(x => x.ConvertToRule(this.Config.Metadata.Name)).
                 ToArray();
         }
