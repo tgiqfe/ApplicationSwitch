@@ -7,6 +7,10 @@ namespace ApplicationSwitch
 {
     public class Switcher
     {
+        /// <summary>
+        /// Create sample rule file.
+        /// </summary>
+        /// <param name="num"></param>
         public static void CreateSample(int num)
         {
             string text = num switch
@@ -23,6 +27,9 @@ namespace ApplicationSwitch
             Console.WriteLine(text);
         }
 
+        /// <summary>
+        /// Show version.
+        /// </summary>
         public static string Version
         {
             get
@@ -31,6 +38,11 @@ namespace ApplicationSwitch
             }
         }
 
+        /// <summary>
+        /// Create instance.
+        /// this program is start!
+        /// </summary>
+        /// <returns></returns>
         public static Switcher GetInstance()
         {
             return new Switcher();

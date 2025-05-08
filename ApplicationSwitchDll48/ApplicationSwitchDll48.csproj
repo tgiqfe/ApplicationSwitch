@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Lib\Functions.cs" />
     <Compile Include="Lib\Item.cs" />
+    <Compile Include="Lib\Logger.cs" />
     <Compile Include="Lib\Rules\AppConfig.cs" />
     <Compile Include="Lib\Rules\AppConfigMetadata.cs" />
     <Compile Include="Lib\Rules\AppConfigRule.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Lib\Rules\RuleHidden.cs" />
     <Compile Include="Lib\Rules\RuleRegistry.cs" />
     <Compile Include="Lib\Yml\MultilineScalarFlowStyleEmitter.cs" />
+    <Compile Include="Lib\Yml\NaturalComparer.cs" />
     <Compile Include="Lib\Yml\YamlIEnumerableSkipEmptyObjectGraphVisitor.cs" />
     <Compile Include="Sample\SampleRule\Rule_Command01.cs" />
     <Compile Include="Sample\SampleRule\Rule_File01.cs" />
