@@ -1,0 +1,29 @@
+# Init
+Import-Module "${env:USERPROFILE}\Desktop\AppSwitch\ApplicationSwitch.dll"
+
+# Parameter
+$evacuateDir = "${env:USERPROFILE}\Desktop\Evacuate"
+$rulesDir = "${env:USERPROFILE}\Desktop\Rules"
+
+# Main
+$asw = [ApplicationSwitch.Switcher]::GetInstance()
+$asw.EvacuateDirectory = $evacuateDir
+$asw.HiddenEvacuateDirectory = $true
+
+Get-ChildItem($rulesDir) | `
+  ? { $_.Extension -eq ".yml" -or $_.Extension -eq ".yaml" } | `
+  % { $asw.LoadRuleFile($_.FullName) } | `
+  % {
+    $ret = $_.CheckMetadataParameter()
+    if (!($ret)) { return }
+    $ret = $_.CheckTargetParameter()
+    if (!($ret)) { return }
+    $ret = $_.CheckRuleParameter()
+    if (!($ret)) { return }
+    $endis = $_.CheckEnableOrDisable()
+    if ($endis -eq $true) {
+      $_.ConvertToRule() | ? { $_.Enabled } | % { $_.EnableProcess() }
+    } elseif ($endis -ne $null -and $endis -eq $false) {
+      $_.ConvertToRule() | ? { $_.Enabled } | % { $_.DisableProcess() }
+    }
+  }
